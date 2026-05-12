@@ -2,7 +2,7 @@ from django.db.models import DecimalField, ExpressionWrapper, F, Sum
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import ProductForm
+from .forms import ClientForm, ProductForm
 from .models import Client, Product, SaleItem
 
 
@@ -36,6 +36,18 @@ def client_list(request):
         client.most_purchased_item = most_purchased["product__name"] if most_purchased else "Nenhum"
 
     return render(request, "clientes.html", {"clients": clients})
+
+
+def client_create(request):
+    if request.method == "POST":
+        form = ClientForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("clientes")
+    else:
+        form = ClientForm()
+
+    return render(request, "cliente_form.html", {"form": form})
 
 
 def product_update(request, product_id):

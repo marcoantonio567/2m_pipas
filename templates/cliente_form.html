@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2M Pipas - Clientes</title>
+    <title>2M Pipas - Novo Cliente</title>
     <style>
         :root {
             color-scheme: light;
@@ -14,6 +14,7 @@
             --text: #172033;
             --muted: #667085;
             --border: #d8e1ec;
+            --danger: #b42318;
             --shadow: 0 18px 45px rgba(23, 32, 51, 0.10);
         }
 
@@ -89,10 +90,6 @@
         }
 
         .header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 16px;
             margin-bottom: 24px;
         }
 
@@ -109,77 +106,91 @@
             line-height: 1.5;
         }
 
-        .action-link {
+        .form-panel {
+            width: min(560px, 100%);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.06);
+        }
+
+        .form-row {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .field {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 14px;
+            color: var(--text);
+            font: inherit;
+            line-height: 1.4;
+            background: #ffffff;
+        }
+
+        .field:focus {
+            border-color: var(--primary);
+            outline: 3px solid #c7ebe7;
+        }
+
+        .errors {
+            margin: 8px 0 0;
+            padding-left: 18px;
+            color: var(--danger);
+            font-size: 14px;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             min-height: 44px;
             padding: 0 18px;
             border-radius: 8px;
-            background: var(--primary);
-            color: #ffffff;
-            font-size: 14px;
+            border: 1px solid transparent;
+            font: inherit;
             font-weight: 700;
             text-decoration: none;
-            white-space: nowrap;
+            cursor: pointer;
         }
 
-        .action-link:hover,
-        .action-link:focus {
+        .button-primary {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .button-primary:hover,
+        .button-primary:focus {
             background: var(--primary-dark);
             outline: none;
         }
 
-        .table-wrap {
-            overflow-x: auto;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.06);
+        .button-secondary {
+            background: #ffffff;
+            color: var(--text);
+            border-color: var(--border);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 760px;
-        }
-
-        th,
-        td {
-            padding: 16px 18px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-
-        th {
-            color: var(--muted);
-            font-size: 13px;
-            text-transform: uppercase;
-        }
-
-        td {
-            font-size: 15px;
-        }
-
-        tr:last-child td {
-            border-bottom: 0;
-        }
-
-        .client-name,
-        .money {
-            font-weight: 700;
-        }
-
-        .money {
+        .button-secondary:hover,
+        .button-secondary:focus {
             color: var(--primary-dark);
-        }
-
-        .empty {
-            padding: 22px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--muted);
+            border-color: #b8e1dc;
+            outline: none;
         }
 
         @media (max-width: 760px) {
@@ -199,14 +210,6 @@
 
             .header h1 {
                 font-size: 28px;
-            }
-
-            .header {
-                display: block;
-            }
-
-            .action-link {
-                margin-top: 16px;
             }
         }
     </style>
@@ -229,41 +232,32 @@
 
         <section class="content">
             <div class="header">
-                <div>
-                    <h1>Clientes</h1>
-                    <p>Resumo de compras por cliente.</p>
-                </div>
-                <a class="action-link" href="{% url 'cliente_novo' %}">Novo cliente</a>
+                <h1>Novo cliente</h1>
+                <p>Cadastre nome e idade do cliente.</p>
             </div>
 
-            {% if clients %}
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Idade</th>
-                                <th>Quantidade comprada</th>
-                                <th>Item mais comprado</th>
-                                <th>Total comprado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for client in clients %}
-                                <tr>
-                                    <td class="client-name">{{ client.name }}</td>
-                                    <td>{{ client.age }}</td>
-                                    <td>{{ client.total_quantity }}</td>
-                                    <td>{{ client.most_purchased_item }}</td>
-                                    <td class="money">R$ {{ client.total_spent|floatformat:2 }}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+            <form class="form-panel" method="post">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="form-row">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                            <ul class="errors">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="actions">
+                    <button class="button button-primary" type="submit">Cadastrar cliente</button>
+                    <a class="button button-secondary" href="{% url 'clientes' %}">Cancelar</a>
                 </div>
-            {% else %}
-                <div class="empty">Nenhum cliente cadastrado.</div>
-            {% endif %}
+            </form>
         </section>
     </main>
 </body>

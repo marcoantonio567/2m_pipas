@@ -1,6 +1,27 @@
 from django import forms
 
-from .models import Product
+from .models import Client, Product
+
+
+class ClientForm(forms.ModelForm):
+    class Meta:
+        model = Client
+        fields = ["name", "age"]
+        labels = {
+            "name": "Nome",
+            "age": "Idade",
+        }
+        widgets = {
+            "name": forms.TextInput(attrs={"class": "field", "placeholder": "Nome do cliente"}),
+            "age": forms.NumberInput(
+                attrs={
+                    "class": "field",
+                    "placeholder": "0",
+                    "min": "0",
+                    "max": "120",
+                }
+            ),
+        }
 
 
 class ProductForm(forms.ModelForm):
