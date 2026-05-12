@@ -28,3 +28,25 @@ class Client(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Sale(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="sales")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Venda #{self.id} - {self.client.name}"
+
+
+class SaleItem(models.Model):
+    sale = models.ForeignKey(Sale, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name="sale_items")
+    quantity = models.PositiveIntegerField(default=1)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    @property
+    def total_price(self):
+        return self.quantity * self.unit_price
+
+    def __str__(self):
+        return f"{self.quantity}x {self.product.name}"
