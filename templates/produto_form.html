@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2M Pipas - Produtos</title>
+    <title>2M Pipas - Alterar Produto</title>
     <style>
         :root {
             color-scheme: light;
@@ -14,6 +14,7 @@
             --text: #172033;
             --muted: #667085;
             --border: #d8e1ec;
+            --danger: #b42318;
             --shadow: 0 18px 45px rgba(23, 32, 51, 0.10);
         }
 
@@ -105,78 +106,95 @@
             line-height: 1.5;
         }
 
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 16px;
-        }
-
-        .product {
-            min-height: 190px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+        .form-panel {
+            width: min(680px, 100%);
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 18px;
+            padding: 24px;
             box-shadow: 0 10px 24px rgba(23, 32, 51, 0.06);
         }
 
-        .product h2 {
-            margin: 0 0 10px;
-            font-size: 20px;
-            line-height: 1.25;
+        .form-row {
+            margin-bottom: 18px;
         }
 
-        .product p {
-            margin: 0;
-            color: var(--muted);
-            line-height: 1.45;
-        }
-
-        .price {
-            margin-top: 18px;
-            color: var(--primary-dark);
-            font-size: 22px;
+        label {
+            display: block;
+            margin-bottom: 8px;
             font-weight: 700;
         }
 
-        .product-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-top: 18px;
+        .field {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 14px;
+            color: var(--text);
+            font: inherit;
+            line-height: 1.4;
+            background: #ffffff;
         }
 
-        .edit-link {
+        textarea.field {
+            resize: vertical;
+        }
+
+        .field:focus {
+            border-color: var(--primary);
+            outline: 3px solid #c7ebe7;
+        }
+
+        .errors {
+            margin: 8px 0 0;
+            padding-left: 18px;
+            color: var(--danger);
+            font-size: 14px;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-height: 40px;
-            padding: 0 14px;
+            min-height: 44px;
+            padding: 0 18px;
             border-radius: 8px;
-            background: var(--primary);
-            color: #ffffff;
-            font-size: 14px;
+            border: 1px solid transparent;
+            font: inherit;
             font-weight: 700;
             text-decoration: none;
-            white-space: nowrap;
+            cursor: pointer;
         }
 
-        .edit-link:hover,
-        .edit-link:focus {
+        .button-primary {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .button-primary:hover,
+        .button-primary:focus {
             background: var(--primary-dark);
             outline: none;
         }
 
-        .empty {
-            padding: 22px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--muted);
+        .button-secondary {
+            background: #ffffff;
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .button-secondary:hover,
+        .button-secondary:focus {
+            color: var(--primary-dark);
+            border-color: #b8e1dc;
+            outline: none;
         }
 
         @media (max-width: 760px) {
@@ -218,28 +236,32 @@
 
         <section class="content">
             <div class="header">
-                <h1>Produtos</h1>
-                <p>Produtos cadastrados no sistema.</p>
+                <h1>Alterar produto</h1>
+                <p>{{ product.name }}</p>
             </div>
 
-            {% if products %}
-                <div class="products">
-                    {% for product in products %}
-                        <article class="product">
-                            <div>
-                                <h2>{{ product.name }}</h2>
-                                <p>{{ product.description }}</p>
-                            </div>
-                            <div class="product-footer">
-                                <div class="price">R$ {{ product.price }}</div>
-                                <a class="edit-link" href="{% url 'produto_alterar' product.id %}">Alterar</a>
-                            </div>
-                        </article>
-                    {% endfor %}
+            <form class="form-panel" method="post">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="form-row">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                            <ul class="errors">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="actions">
+                    <button class="button button-primary" type="submit">Salvar alteracoes</button>
+                    <a class="button button-secondary" href="{% url 'produtos' %}">Cancelar</a>
                 </div>
-            {% else %}
-                <div class="empty">Nenhum produto cadastrado.</div>
-            {% endif %}
+            </form>
         </section>
     </main>
 </body>

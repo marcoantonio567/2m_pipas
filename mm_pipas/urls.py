@@ -18,10 +18,11 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 
-from app.views import product_list
+from app.views import product_list, product_update
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='menu.html'), name='menu'),
     path('produtos/', product_list, name='produtos'),
+    path('produtos/<int:product_id>/alterar/', product_update, name='produto_alterar'),
     path('admin/', admin.site.urls),
 ]
