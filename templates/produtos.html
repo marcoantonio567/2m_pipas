@@ -135,8 +135,20 @@
             line-height: 1.45;
         }
 
+        .details {
+            display: grid;
+            gap: 8px;
+            margin-top: 16px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .details span {
+            color: var(--text);
+            font-weight: 700;
+        }
+
         .price {
-            margin-top: 18px;
             color: var(--primary-dark);
             font-size: 22px;
             font-weight: 700;
@@ -229,9 +241,15 @@
                             <div>
                                 <h2>{{ product.name }}</h2>
                                 <p>{{ product.description }}</p>
+                                <div class="details">
+                                    <div>Quantidade: <span>{{ product.quantity }}</span></div>
+                                    <div>Preco de custo: <span>R$ {{ product.cost_price|floatformat:2 }}</span></div>
+                                    <div>Ganho por unidade: <span>R$ {{ product.profit_value|floatformat:2 }}</span></div>
+                                    <div>Porcentagem de ganho: <span>{{ product.profit_percentage|floatformat:2 }}%</span></div>
+                                </div>
                             </div>
                             <div class="product-footer">
-                                <div class="price">R$ {{ product.price }}</div>
+                                <div class="price">R$ {{ product.price|floatformat:2 }}</div>
                                 <a class="edit-link" href="{% url 'produto_alterar' product.id %}">Alterar</a>
                             </div>
                         </article>
