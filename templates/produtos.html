@@ -162,7 +162,14 @@
             margin-top: 18px;
         }
 
-        .edit-link {
+        .product-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .action-link {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -177,10 +184,19 @@
             white-space: nowrap;
         }
 
-        .edit-link:hover,
-        .edit-link:focus {
+        .action-link:hover,
+        .action-link:focus {
             background: var(--primary-dark);
             outline: none;
+        }
+
+        .delete-link {
+            background: #b42318;
+        }
+
+        .delete-link:hover,
+        .delete-link:focus {
+            background: #8f1c13;
         }
 
         .empty {
@@ -250,7 +266,10 @@
                             </div>
                             <div class="product-footer">
                                 <div class="price">R$ {{ product.price|floatformat:2 }}</div>
-                                <a class="edit-link" href="{% url 'produto_alterar' product.id %}">Alterar</a>
+                                <div class="product-actions">
+                                    <a class="action-link" href="{% url 'produto_alterar' product.id %}">Alterar</a>
+                                    <a class="action-link delete-link" href="{% url 'produto_excluir' product.id %}">Excluir</a>
+                                </div>
                             </div>
                         </article>
                     {% endfor %}
