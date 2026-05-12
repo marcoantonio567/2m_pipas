@@ -18,11 +18,12 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 
-from app.views import client_create, client_list, product_delete, product_list, product_update
+from app.views import client_create, client_list, product_create, product_delete, product_list, product_update
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='menu.html'), name='menu'),
     path('produtos/', product_list, name='produtos'),
+    path('produtos/novo/', product_create, name='produto_novo'),
     path('clientes/', client_list, name='clientes'),
     path('clientes/novo/', client_create, name='cliente_novo'),
     path('produtos/<int:product_id>/alterar/', product_update, name='produto_alterar'),

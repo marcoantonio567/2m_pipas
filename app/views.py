@@ -11,6 +11,18 @@ def product_list(request):
     return render(request, "produtos.html", {"products": products})
 
 
+def product_create(request):
+    if request.method == "POST":
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("produtos")
+    else:
+        form = ProductForm()
+
+    return render(request, "produto_form.html", {"form": form, "product": None})
+
+
 def client_list(request):
     total_spent = ExpressionWrapper(
         F("sales__items__quantity") * F("sales__items__unit_price"),

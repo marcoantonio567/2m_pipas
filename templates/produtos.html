@@ -89,6 +89,10 @@
         }
 
         .header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
             margin-bottom: 24px;
         }
 
@@ -225,6 +229,14 @@
             .header h1 {
                 font-size: 28px;
             }
+
+            .header {
+                display: block;
+            }
+
+            .header .action-link {
+                margin-top: 16px;
+            }
         }
     </style>
 </head>
@@ -246,8 +258,11 @@
 
         <section class="content">
             <div class="header">
-                <h1>Produtos</h1>
-                <p>Produtos cadastrados no sistema.</p>
+                <div>
+                    <h1>Produtos</h1>
+                    <p>Produtos cadastrados no sistema.</p>
+                </div>
+                <a class="action-link" href="{% url 'produto_novo' %}">Novo produto</a>
             </div>
 
             {% if products %}

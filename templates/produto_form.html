@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2M Pipas - Alterar Produto</title>
+    <title>2M Pipas - {% if product %}Alterar Produto{% else %}Novo Produto{% endif %}</title>
     <style>
         :root {
             color-scheme: light;
@@ -236,8 +236,8 @@
 
         <section class="content">
             <div class="header">
-                <h1>Alterar produto</h1>
-                <p>{{ product.name }}</p>
+                <h1>{% if product %}Alterar produto{% else %}Novo produto{% endif %}</h1>
+                <p>{% if product %}{{ product.name }}{% else %}Cadastre um novo produto no sistema.{% endif %}</p>
             </div>
 
             <form class="form-panel" method="post">
@@ -258,7 +258,7 @@
                 {% endfor %}
 
                 <div class="actions">
-                    <button class="button button-primary" type="submit">Salvar alteracoes</button>
+                    <button class="button button-primary" type="submit">{% if product %}Salvar alteracoes{% else %}Cadastrar produto{% endif %}</button>
                     <a class="button button-secondary" href="{% url 'produtos' %}">Cancelar</a>
                 </div>
             </form>
