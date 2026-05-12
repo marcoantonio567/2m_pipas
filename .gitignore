@@ -1,2 +1,6 @@
 venv/
 db.sqlite3
+app/__pycache__/
+app/migrations/__pycache__/
+mm_pipas/__pycache__/
+*.pyc
