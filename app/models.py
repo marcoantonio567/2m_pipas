@@ -30,6 +30,18 @@ class Client(models.Model):
         return self.name
 
 
+class FinancialCategory(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name = "Categoria financeira"
+        verbose_name_plural = "Categorias financeiras"
+
+    def __str__(self):
+        return self.name
+
+
 class Sale(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="sales")
     created_at = models.DateTimeField(auto_now_add=True)

@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Client, Product
+from .models import Client, FinancialCategory, Product
 
 
 class ClientForm(forms.ModelForm):
@@ -65,6 +65,23 @@ class ProductForm(forms.ModelForm):
                     "placeholder": "0.00",
                     "step": "0.01",
                     "min": "0",
+                }
+            ),
+        }
+
+
+class FinancialCategoryForm(forms.ModelForm):
+    class Meta:
+        model = FinancialCategory
+        fields = ["name"]
+        labels = {
+            "name": "Nome",
+        }
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "class": "field",
+                    "placeholder": "Nome da categoria",
                 }
             ),
         }

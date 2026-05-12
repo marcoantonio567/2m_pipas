@@ -2,8 +2,8 @@ from django.db.models import DecimalField, ExpressionWrapper, F, Sum
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import ClientForm, ProductForm
-from .models import Client, Product, SaleItem
+from .forms import ClientForm, FinancialCategoryForm, ProductForm
+from .models import Client, FinancialCategory, Product, SaleItem
 
 
 def product_list(request):
@@ -60,6 +60,47 @@ def client_create(request):
         form = ClientForm()
 
     return render(request, "cliente_form.html", {"form": form, "client": None})
+
+
+def financial_category_list(request):
+    categories = FinancialCategory.objects.all()
+    return render(request, "financeiro_categorias.html", {"categories": categories})
+
+
+def financial_category_create(request):
+    if request.method == "POST":
+        form = FinancialCategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("financeiro_categorias")
+    else:
+        form = FinancialCategoryForm()
+
+    return render(request, "financeiro_categoria_form.html", {"form": form, "category": None})
+
+
+def financial_category_update(request, category_id):
+    category = get_object_or_404(FinancialCategory, id=category_id)
+
+    if request.method == "POST":
+        form = FinancialCategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            return redirect("financeiro_categorias")
+    else:
+        form = FinancialCategoryForm(instance=category)
+
+    return render(request, "financeiro_categoria_form.html", {"form": form, "category": category})
+
+
+def financial_category_delete(request, category_id):
+    category = get_object_or_404(FinancialCategory, id=category_id)
+
+    if request.method == "POST":
+        category.delete()
+        return redirect("financeiro_categorias")
+
+    return render(request, "financeiro_categoria_confirm_delete.html", {"category": category})
 
 
 def client_update(request, client_id):

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2M Pipas - {% if product %}Alterar Produto{% else %}Novo Produto{% endif %}</title>
+    <title>2M Pipas - Excluir Categoria</title>
     <style>
         :root {
             color-scheme: light;
@@ -15,12 +15,11 @@
             --muted: #667085;
             --border: #d8e1ec;
             --danger: #b42318;
+            --danger-dark: #8f1c13;
             --shadow: 0 18px 45px rgba(23, 32, 51, 0.10);
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -43,22 +42,9 @@
             box-shadow: var(--shadow);
         }
 
-        .brand {
-            margin-bottom: 34px;
-        }
-
-        .brand strong {
-            display: block;
-            font-size: 24px;
-            line-height: 1.1;
-        }
-
-        .brand span {
-            display: block;
-            margin-top: 6px;
-            color: var(--muted);
-            font-size: 14px;
-        }
+        .brand { margin-bottom: 34px; }
+        .brand strong { display: block; font-size: 24px; line-height: 1.1; }
+        .brand span { display: block; margin-top: 6px; color: var(--muted); font-size: 14px; }
 
         .menu {
             display: grid;
@@ -73,7 +59,6 @@
             text-decoration: none;
             font-weight: 700;
             border: 1px solid transparent;
-            transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
         }
 
         .menu a:hover,
@@ -85,29 +70,10 @@
             outline: none;
         }
 
-        .content {
-            padding: 44px;
-        }
+        .content { padding: 44px; }
 
-        .header {
-            margin-bottom: 24px;
-        }
-
-        .header h1 {
-            margin: 0 0 8px;
-            font-size: 34px;
-            line-height: 1.15;
-        }
-
-        .header p {
-            margin: 0;
-            color: var(--muted);
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        .form-panel {
-            width: min(680px, 100%);
+        .confirm-panel {
+            width: min(620px, 100%);
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -115,41 +81,26 @@
             box-shadow: 0 10px 24px rgba(23, 32, 51, 0.06);
         }
 
-        .form-row {
-            margin-bottom: 18px;
+        h1 {
+            margin: 0 0 10px;
+            font-size: 34px;
+            line-height: 1.15;
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 700;
+        p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.5;
         }
 
-        .field {
-            width: 100%;
-            border: 1px solid var(--border);
+        .category-name {
+            margin-top: 18px;
+            padding: 14px 16px;
             border-radius: 8px;
-            padding: 12px 14px;
-            color: var(--text);
-            font: inherit;
-            line-height: 1.4;
-            background: #ffffff;
-        }
-
-        textarea.field {
-            resize: vertical;
-        }
-
-        .field:focus {
-            border-color: var(--primary);
-            outline: 3px solid #c7ebe7;
-        }
-
-        .errors {
-            margin: 8px 0 0;
-            padding-left: 18px;
+            background: #fff6f5;
             color: var(--danger);
-            font-size: 14px;
+            font-weight: 700;
         }
 
         .actions {
@@ -173,14 +124,14 @@
             cursor: pointer;
         }
 
-        .button-primary {
-            background: var(--primary);
+        .button-danger {
+            background: var(--danger);
             color: #ffffff;
         }
 
-        .button-primary:hover,
-        .button-primary:focus {
-            background: var(--primary-dark);
+        .button-danger:hover,
+        .button-danger:focus {
+            background: var(--danger-dark);
             outline: none;
         }
 
@@ -198,23 +149,14 @@
         }
 
         @media (max-width: 760px) {
-            .page {
-                grid-template-columns: 1fr;
-            }
-
+            .page { grid-template-columns: 1fr; }
             .sidebar {
                 border-right: 0;
                 border-bottom: 1px solid var(--border);
                 box-shadow: none;
             }
-
-            .content {
-                padding: 28px 22px;
-            }
-
-            .header h1 {
-                font-size: 28px;
-            }
+            .content { padding: 28px 22px; }
+            h1 { font-size: 28px; }
         }
     </style>
 </head>
@@ -227,39 +169,23 @@
             </div>
 
             <nav class="menu">
-                <a class="active" href="{% url 'produtos' %}">Produtos</a>
+                <a href="{% url 'produtos' %}">Produtos</a>
                 <a href="{% url 'clientes' %}">Clientes</a>
                 <a href="#">Vendas</a>
-                <a href="{% url 'financeiro_categorias' %}">Financeiro</a>
+                <a class="active" href="{% url 'financeiro_categorias' %}">Financeiro</a>
             </nav>
         </aside>
 
         <section class="content">
-            <div class="header">
-                <h1>{% if product %}Alterar produto{% else %}Novo produto{% endif %}</h1>
-                <p>{% if product %}{{ product.name }}{% else %}Cadastre um novo produto no sistema.{% endif %}</p>
-            </div>
-
-            <form class="form-panel" method="post">
+            <form class="confirm-panel" method="post">
                 {% csrf_token %}
-
-                {% for field in form %}
-                    <div class="form-row">
-                        {{ field.label_tag }}
-                        {{ field }}
-                        {% if field.errors %}
-                            <ul class="errors">
-                                {% for error in field.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
-                {% endfor %}
+                <h1>Excluir categoria</h1>
+                <p>Confirme para remover esta categoria financeira.</p>
+                <div class="category-name">{{ category.name }}</div>
 
                 <div class="actions">
-                    <button class="button button-primary" type="submit">{% if product %}Salvar alteracoes{% else %}Cadastrar produto{% endif %}</button>
-                    <a class="button button-secondary" href="{% url 'produtos' %}">Cancelar</a>
+                    <button class="button button-danger" type="submit">Excluir categoria</button>
+                    <a class="button button-secondary" href="{% url 'financeiro_categorias' %}">Cancelar</a>
                 </div>
             </form>
         </section>
