@@ -59,7 +59,31 @@ def client_create(request):
     else:
         form = ClientForm()
 
-    return render(request, "cliente_form.html", {"form": form})
+    return render(request, "cliente_form.html", {"form": form, "client": None})
+
+
+def client_update(request, client_id):
+    client = get_object_or_404(Client, id=client_id)
+
+    if request.method == "POST":
+        form = ClientForm(request.POST, instance=client)
+        if form.is_valid():
+            form.save()
+            return redirect("clientes")
+    else:
+        form = ClientForm(instance=client)
+
+    return render(request, "cliente_form.html", {"form": form, "client": client})
+
+
+def client_delete(request, client_id):
+    client = get_object_or_404(Client, id=client_id)
+
+    if request.method == "POST":
+        client.delete()
+        return redirect("clientes")
+
+    return render(request, "cliente_confirm_delete.html", {"client": client})
 
 
 def product_update(request, product_id):

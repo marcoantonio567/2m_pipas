@@ -18,7 +18,16 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 
-from app.views import client_create, client_list, product_create, product_delete, product_list, product_update
+from app.views import (
+    client_create,
+    client_delete,
+    client_list,
+    client_update,
+    product_create,
+    product_delete,
+    product_list,
+    product_update,
+)
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='menu.html'), name='menu'),
@@ -26,6 +35,8 @@ urlpatterns = [
     path('produtos/novo/', product_create, name='produto_novo'),
     path('clientes/', client_list, name='clientes'),
     path('clientes/novo/', client_create, name='cliente_novo'),
+    path('clientes/<int:client_id>/alterar/', client_update, name='cliente_alterar'),
+    path('clientes/<int:client_id>/excluir/', client_delete, name='cliente_excluir'),
     path('produtos/<int:product_id>/alterar/', product_update, name='produto_alterar'),
     path('produtos/<int:product_id>/excluir/', product_delete, name='produto_excluir'),
     path('admin/', admin.site.urls),

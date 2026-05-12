@@ -14,6 +14,8 @@
             --text: #172033;
             --muted: #667085;
             --border: #d8e1ec;
+            --danger: #b42318;
+            --danger-dark: #8f1c13;
             --shadow: 0 18px 45px rgba(23, 32, 51, 0.10);
         }
 
@@ -128,6 +130,26 @@
         .action-link:focus {
             background: var(--primary-dark);
             outline: none;
+        }
+
+        .row-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .row-actions .action-link {
+            min-height: 38px;
+            padding: 0 12px;
+        }
+
+        .delete-link {
+            background: var(--danger);
+        }
+
+        .delete-link:hover,
+        .delete-link:focus {
+            background: var(--danger-dark);
         }
 
         .table-wrap {
@@ -246,6 +268,7 @@
                                 <th>Quantidade comprada</th>
                                 <th>Item mais comprado</th>
                                 <th>Total comprado</th>
+                                <th>Acoes</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -256,6 +279,12 @@
                                     <td>{{ client.total_quantity }}</td>
                                     <td>{{ client.most_purchased_item }}</td>
                                     <td class="money">R$ {{ client.total_spent|floatformat:2 }}</td>
+                                    <td>
+                                        <div class="row-actions">
+                                            <a class="action-link" href="{% url 'cliente_alterar' client.id %}">Alterar</a>
+                                            <a class="action-link delete-link" href="{% url 'cliente_excluir' client.id %}">Excluir</a>
+                                        </div>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>

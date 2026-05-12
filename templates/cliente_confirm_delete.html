@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2M Pipas - {% if client %}Alterar Cliente{% else %}Novo Cliente{% endif %}</title>
+    <title>2M Pipas - Excluir Cliente</title>
     <style>
         :root {
             color-scheme: light;
@@ -15,6 +15,7 @@
             --muted: #667085;
             --border: #d8e1ec;
             --danger: #b42318;
+            --danger-dark: #8f1c13;
             --shadow: 0 18px 45px rgba(23, 32, 51, 0.10);
         }
 
@@ -89,25 +90,8 @@
             padding: 44px;
         }
 
-        .header {
-            margin-bottom: 24px;
-        }
-
-        .header h1 {
-            margin: 0 0 8px;
-            font-size: 34px;
-            line-height: 1.15;
-        }
-
-        .header p {
-            margin: 0;
-            color: var(--muted);
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        .form-panel {
-            width: min(560px, 100%);
+        .confirm-panel {
+            width: min(620px, 100%);
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -115,37 +99,26 @@
             box-shadow: 0 10px 24px rgba(23, 32, 51, 0.06);
         }
 
-        .form-row {
-            margin-bottom: 18px;
+        h1 {
+            margin: 0 0 10px;
+            font-size: 34px;
+            line-height: 1.15;
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 700;
+        p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.5;
         }
 
-        .field {
-            width: 100%;
-            border: 1px solid var(--border);
+        .client-name {
+            margin-top: 18px;
+            padding: 14px 16px;
             border-radius: 8px;
-            padding: 12px 14px;
-            color: var(--text);
-            font: inherit;
-            line-height: 1.4;
-            background: #ffffff;
-        }
-
-        .field:focus {
-            border-color: var(--primary);
-            outline: 3px solid #c7ebe7;
-        }
-
-        .errors {
-            margin: 8px 0 0;
-            padding-left: 18px;
+            background: #fff6f5;
             color: var(--danger);
-            font-size: 14px;
+            font-weight: 700;
         }
 
         .actions {
@@ -169,14 +142,14 @@
             cursor: pointer;
         }
 
-        .button-primary {
-            background: var(--primary);
+        .button-danger {
+            background: var(--danger);
             color: #ffffff;
         }
 
-        .button-primary:hover,
-        .button-primary:focus {
-            background: var(--primary-dark);
+        .button-danger:hover,
+        .button-danger:focus {
+            background: var(--danger-dark);
             outline: none;
         }
 
@@ -208,7 +181,7 @@
                 padding: 28px 22px;
             }
 
-            .header h1 {
+            h1 {
                 font-size: 28px;
             }
         }
@@ -231,30 +204,14 @@
         </aside>
 
         <section class="content">
-            <div class="header">
-                <h1>{% if client %}Alterar cliente{% else %}Novo cliente{% endif %}</h1>
-                <p>{% if client %}{{ client.name }}{% else %}Cadastre nome e idade do cliente.{% endif %}</p>
-            </div>
-
-            <form class="form-panel" method="post">
+            <form class="confirm-panel" method="post">
                 {% csrf_token %}
-
-                {% for field in form %}
-                    <div class="form-row">
-                        {{ field.label_tag }}
-                        {{ field }}
-                        {% if field.errors %}
-                            <ul class="errors">
-                                {% for error in field.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
-                {% endfor %}
+                <h1>Excluir cliente</h1>
+                <p>Confirme para remover este cliente e o historico de vendas dele.</p>
+                <div class="client-name">{{ client.name }}</div>
 
                 <div class="actions">
-                    <button class="button button-primary" type="submit">{% if client %}Salvar alteracoes{% else %}Cadastrar cliente{% endif %}</button>
+                    <button class="button button-danger" type="submit">Excluir cliente</button>
                     <a class="button button-secondary" href="{% url 'clientes' %}">Cancelar</a>
                 </div>
             </form>
