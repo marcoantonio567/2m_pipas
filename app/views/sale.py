@@ -8,6 +8,8 @@ from app.models import Client, FinancialCategory, FinancialTransaction, Product,
 
 
 class SaleListView(ListView):
+    """Lista vendas, aplica filtros de busca e calcula totais exibidos na tela."""
+
     model = Sale
     template_name = "vendas/html/vendas.html"
     context_object_name = "sales"
@@ -47,6 +49,8 @@ class SaleListView(ListView):
 
 
 class SaleCreateView(FormView):
+    """Registra uma venda, baixa o estoque e cria a movimentacao financeira."""
+
     form_class = SaleForm
     template_name = "vendas/html/venda_form.html"
 

@@ -6,6 +6,8 @@ from app.models import Product
 
 
 class ProductListView(ListView):
+    """Lista os produtos cadastrados em ordem alfabetica."""
+
     model = Product
     template_name = "produtos/html/produtos.html"
     context_object_name = "products"
@@ -13,6 +15,8 @@ class ProductListView(ListView):
 
 
 class ProductCreateView(CreateView):
+    """Exibe e processa o formulario de cadastro de produtos."""
+
     model = Product
     form_class = ProductForm
     template_name = "produtos/html/produto_form.html"
@@ -25,6 +29,8 @@ class ProductCreateView(CreateView):
 
 
 class ProductUpdateView(UpdateView):
+    """Exibe e processa o formulario de edicao de produtos."""
+
     model = Product
     form_class = ProductForm
     template_name = "produtos/html/produto_form.html"
@@ -34,6 +40,8 @@ class ProductUpdateView(UpdateView):
 
 
 class ProductDeleteView(DeleteView):
+    """Exibe a confirmacao e remove um produto cadastrado."""
+
     model = Product
     template_name = "produtos/html/produto_confirm_delete.html"
     context_object_name = "product"

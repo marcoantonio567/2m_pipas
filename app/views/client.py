@@ -8,6 +8,8 @@ from app.models import Client, SaleItem
 
 
 class ClientListView(ListView):
+    """Lista os clientes com totais de compras e item mais comprado."""
+
     model = Client
     template_name = "clientes/html/clientes.html"
     context_object_name = "clients"
@@ -40,6 +42,8 @@ class ClientListView(ListView):
 
 
 class ClientCreateView(CreateView):
+    """Exibe e processa o formulario de cadastro de clientes."""
+
     model = Client
     form_class = ClientForm
     template_name = "clientes/html/cliente_form.html"
@@ -52,6 +56,8 @@ class ClientCreateView(CreateView):
 
 
 class ClientUpdateView(UpdateView):
+    """Exibe e processa o formulario de edicao de clientes."""
+
     model = Client
     form_class = ClientForm
     template_name = "clientes/html/cliente_form.html"
@@ -61,6 +67,8 @@ class ClientUpdateView(UpdateView):
 
 
 class ClientDeleteView(DeleteView):
+    """Exibe a confirmacao e remove um cliente cadastrado."""
+
     model = Client
     template_name = "clientes/html/cliente_confirm_delete.html"
     context_object_name = "client"

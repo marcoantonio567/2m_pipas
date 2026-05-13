@@ -9,11 +9,15 @@ from app.models import FinancialCategory, FinancialTransaction
 
 
 class DefaultFinancialCategoryMixin:
+    """Garante que a categoria financeira padrao exista antes de usar as views."""
+
     def ensure_default_category(self):
         FinancialCategory.objects.get_or_create(name=FinancialCategory.PROTECTED_NAME)
 
 
 class FinancialCategoryListView(DefaultFinancialCategoryMixin, ListView):
+    """Lista as categorias financeiras cadastradas."""
+
     model = FinancialCategory
     template_name = "financeiro/html/financeiro_categorias.html"
     context_object_name = "categories"
@@ -24,6 +28,8 @@ class FinancialCategoryListView(DefaultFinancialCategoryMixin, ListView):
 
 
 class CashRegisterView(DefaultFinancialCategoryMixin, TemplateView):
+    """Exibe o caixa com movimentacoes, entradas, saidas e saldo atual."""
+
     template_name = "financeiro/html/financeiro_caixa.html"
 
     def get_context_data(self, **kwargs):
@@ -49,6 +55,8 @@ class CashRegisterView(DefaultFinancialCategoryMixin, TemplateView):
 
 
 class FinancialTransactionCreateView(DefaultFinancialCategoryMixin, CreateView):
+    """Exibe e processa o formulario de criacao de movimentacoes financeiras."""
+
     model = FinancialTransaction
     form_class = FinancialTransactionForm
     template_name = "financeiro/html/financeiro_movimentacao_form.html"
@@ -60,6 +68,8 @@ class FinancialTransactionCreateView(DefaultFinancialCategoryMixin, CreateView):
 
 
 class FinancialCategoryCreateView(CreateView):
+    """Exibe e processa o formulario de cadastro de categorias financeiras."""
+
     model = FinancialCategory
     form_class = FinancialCategoryForm
     template_name = "financeiro/html/financeiro_categoria_form.html"
@@ -72,6 +82,8 @@ class FinancialCategoryCreateView(CreateView):
 
 
 class ProtectedCategoryRedirectMixin:
+    """Impede edicao ou exclusao da categoria financeira protegida."""
+
     pk_url_kwarg = "category_id"
     success_url = reverse_lazy("financeiro_categorias")
 
@@ -83,6 +95,8 @@ class ProtectedCategoryRedirectMixin:
 
 
 class FinancialCategoryUpdateView(ProtectedCategoryRedirectMixin, UpdateView):
+    """Exibe e processa o formulario de edicao de categorias financeiras."""
+
     model = FinancialCategory
     form_class = FinancialCategoryForm
     template_name = "financeiro/html/financeiro_categoria_form.html"
@@ -90,6 +104,8 @@ class FinancialCategoryUpdateView(ProtectedCategoryRedirectMixin, UpdateView):
 
 
 class FinancialCategoryDeleteView(ProtectedCategoryRedirectMixin, DeleteView):
+    """Exibe a confirmacao e remove uma categoria financeira permitida."""
+
     model = FinancialCategory
     template_name = "financeiro/html/financeiro_categoria_confirm_delete.html"
     context_object_name = "category"
