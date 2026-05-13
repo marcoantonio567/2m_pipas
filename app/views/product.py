@@ -13,6 +13,16 @@ class ProductListView(ListView):
     context_object_name = "products"
     ordering = ["name"]
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        products = context["products"]
+
+        context["total_products"] = len(products)
+        context["total_quantity"] = sum(product.quantity for product in products)
+        context["total_inventory_value"] = sum(product.price * product.quantity for product in products)
+        context["total_estimated_profit"] = sum(product.profit_value * product.quantity for product in products)
+        return context
+
 
 class ProductCreateView(CreateView):
     """Exibe e processa o formulario de cadastro de produtos."""

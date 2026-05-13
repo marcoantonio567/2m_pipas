@@ -27,30 +27,72 @@
         <section class="content">
             <div class="header">
                 <div>
+                    <span class="eyebrow">Catalogo</span>
                     <h1>Produtos</h1>
-                    <p>Produtos cadastrados no sistema.</p>
+                    <p>Controle estoque, precos e margem dos produtos cadastrados.</p>
                 </div>
-                <a class="action-link" href="{% url 'produto_novo' %}">Novo produto</a>
+                <a class="action-link primary-action" href="{% url 'produto_novo' %}">Novo produto</a>
+            </div>
+
+            <div class="summary" aria-label="Resumo de produtos">
+                <article class="summary-card products-total">
+                    <span>Produtos</span>
+                    <strong>{{ total_products }}</strong>
+                </article>
+                <article class="summary-card stock-total">
+                    <span>Estoque total</span>
+                    <strong>{{ total_quantity }}</strong>
+                </article>
+                <article class="summary-card inventory-value">
+                    <span>Valor em estoque</span>
+                    <strong>R$ {{ total_inventory_value|floatformat:2 }}</strong>
+                </article>
+                <article class="summary-card profit-total">
+                    <span>Lucro estimado</span>
+                    <strong>R$ {{ total_estimated_profit|floatformat:2 }}</strong>
+                </article>
             </div>
 
             {% if products %}
                 <div class="products">
                     {% for product in products %}
                         <article class="product">
-                            <div>
-                                <h2>{{ product.name }}</h2>
-                                <p>{{ product.description }}</p>
+                            <div class="product-main">
+                                <div class="product-top">
+                                    <span class="product-icon">P</span>
+                                    <div>
+                                        <h2>{{ product.name }}</h2>
+                                        <p>{{ product.description }}</p>
+                                    </div>
+                                </div>
+
                                 <div class="details">
-                                    <div>Quantidade: <span>{{ product.quantity }}</span></div>
-                                    <div>Preco de custo: <span>R$ {{ product.cost_price|floatformat:2 }}</span></div>
-                                    <div>Ganho por unidade: <span>R$ {{ product.profit_value|floatformat:2 }}</span></div>
-                                    <div>Porcentagem de ganho: <span>{{ product.profit_percentage|floatformat:2 }}%</span></div>
+                                    <div class="detail-pill stock-pill">
+                                        <span>Quantidade</span>
+                                        <strong>{{ product.quantity }}</strong>
+                                    </div>
+                                    <div class="detail-pill cost-pill">
+                                        <span>Custo</span>
+                                        <strong>R$ {{ product.cost_price|floatformat:2 }}</strong>
+                                    </div>
+                                    <div class="detail-pill profit-pill">
+                                        <span>Lucro un.</span>
+                                        <strong>R$ {{ product.profit_value|floatformat:2 }}</strong>
+                                    </div>
+                                    <div class="detail-pill percent-pill">
+                                        <span>Margem</span>
+                                        <strong>{{ product.profit_percentage|floatformat:2 }}%</strong>
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="product-footer">
-                                <div class="price">R$ {{ product.price|floatformat:2 }}</div>
+                                <div>
+                                    <span class="price-label">Preco de venda</span>
+                                    <div class="price">R$ {{ product.price|floatformat:2 }}</div>
+                                </div>
                                 <div class="product-actions">
-                                    <a class="action-link" href="{% url 'produto_alterar' product.id %}">Alterar</a>
+                                    <a class="action-link secondary-action" href="{% url 'produto_alterar' product.id %}">Alterar</a>
                                     <a class="action-link delete-link" href="{% url 'produto_excluir' product.id %}">Excluir</a>
                                 </div>
                             </div>
@@ -58,7 +100,10 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="empty">Nenhum produto cadastrado.</div>
+                <div class="empty">
+                    <strong>Nenhum produto cadastrado.</strong>
+                    <span>Cadastre o primeiro produto para acompanhar estoque, preco e lucro.</span>
+                </div>
             {% endif %}
         </section>
     </main>

@@ -26,12 +26,21 @@
 
         <section class="content">
             <div class="header">
+                <span class="eyebrow">Produtos</span>
                 <h1>{% if product %}Alterar produto{% else %}Novo produto{% endif %}</h1>
-                <p>{% if product %}{{ product.name }}{% else %}Cadastre um novo produto no sistema.{% endif %}</p>
+                <p>{% if product %}Atualize as informacoes de {{ product.name }}.{% else %}Cadastre estoque, custo e preco de venda em um so lugar.{% endif %}</p>
             </div>
 
             <form class="form-panel" method="post">
                 {% csrf_token %}
+
+                <div class="form-intro">
+                    <span class="form-icon">P</span>
+                    <div>
+                        <strong>Informacoes do produto</strong>
+                        <span>Preencha os dados comerciais para manter o estoque organizado.</span>
+                    </div>
+                </div>
 
                 {% for field in form %}
                     <div class="form-row">
