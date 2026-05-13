@@ -51,6 +51,13 @@
                         <small>Caixa e categorias</small>
                     </span>
                 </a>
+                <a href="{% url 'dashboards' %}">
+                    <span class="menu-icon">D</span>
+                    <span>
+                        <strong>Dashboards</strong>
+                        <small>Graficos e indicadores</small>
+                    </span>
+                </a>
             </nav>
         </aside>
 
@@ -87,6 +94,13 @@
                         <span>
                             <strong>Abrir caixa</strong>
                             <small>Veja entradas, saidas e saldo.</small>
+                        </span>
+                    </a>
+                    <a class="quick-card" href="{% url 'dashboards' %}">
+                        <span class="card-icon">D</span>
+                        <span>
+                            <strong>Ver dashboards</strong>
+                            <small>Acompanhe graficos de venda, lucro e financeiro.</small>
                         </span>
                     </a>
                 </div>

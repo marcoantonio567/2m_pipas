@@ -1,0 +1,20 @@
+{% if rows %}
+    <div class="bar-chart">
+        {% for row in rows %}
+            <div class="bar-column">
+                <div class="bar-plot" aria-hidden="true">
+                    <span class="bar-fill{% if row.total < 0 %} negative-fill{% endif %}" style="height: {{ row.percent }}%;"></span>
+                </div>
+                <div class="bar-meta">
+                    <strong>{{ row.label }}</strong>
+                    <span>
+                        R$ {{ row.total|floatformat:2 }}
+                        {% if row.quantity %} - {{ row.quantity }} itens{% endif %}
+                    </span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-chart">{{ empty_text }}</div>
+{% endif %}

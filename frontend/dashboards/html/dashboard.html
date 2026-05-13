@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2M Pipas - Dashboards</title>
+    <link rel="stylesheet" href="{% static 'dashboards/css/dashboard.css' %}">
+</head>
+<body>
+    <main class="page">
+        <aside class="sidebar" aria-label="Menu principal">
+            <div class="brand">
+                <strong>2M Pipas</strong>
+                <span>Sistema de gestao</span>
+            </div>
+
+            <nav class="menu">
+                <a href="{% url 'menu' %}"><span>I</span><strong>Inicio</strong></a>
+                <a class="active" href="{% url 'dashboards' %}"><span>D</span><strong>Dashboards</strong></a>
+                <a href="{% url 'produtos' %}"><span>P</span><strong>Produtos</strong></a>
+                <a href="{% url 'clientes' %}"><span>C</span><strong>Clientes</strong></a>
+                <a href="{% url 'vendas' %}"><span>V</span><strong>Vendas</strong></a>
+                <a href="{% url 'financeiro_caixa' %}"><span>F</span><strong>Financeiro</strong></a>
+            </nav>
+        </aside>
+
+        <section class="content">
+            <div class="header">
+                <div>
+                    <span class="eyebrow">Indicadores</span>
+                    <h1>Dashboards</h1>
+                    <p>Acompanhe vendas, produtos, pagamentos, saidas e lucro do sistema.</p>
+                </div>
+                <div class="actions">
+                    <a class="button button-secondary" href="{% url 'financeiro_caixa' %}">Financeiro</a>
+                    <a class="button button-primary" href="{% url 'venda_nova' %}">Nova venda</a>
+                </div>
+            </div>
+
+            <div class="summary" aria-label="Resumo geral">
+                <div class="summary-card sales-card">
+                    <span>Vendas</span>
+                    <strong>{{ totals.sales }}</strong>
+                </div>
+                <div class="summary-card items-card">
+                    <span>Itens vendidos</span>
+                    <strong>{{ totals.items }}</strong>
+                </div>
+                <div class="summary-card revenue-card">
+                    <span>Faturamento</span>
+                    <strong>R$ {{ totals.revenue|floatformat:2 }}</strong>
+                </div>
+                <div class="summary-card expense-card">
+                    <span>Saidas</span>
+                    <strong>R$ {{ totals.expenses|floatformat:2 }}</strong>
+                </div>
+                <div class="summary-card profit-card">
+                    <span>Lucro bruto</span>
+                    <strong>R$ {{ totals.gross_profit|floatformat:2 }}</strong>
+                </div>
+                <div class="summary-card net-card">
+                    <span>Lucro liquido</span>
+                    <strong>R$ {{ totals.net_profit|floatformat:2 }}</strong>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <section class="chart-panel">
+                    <div class="chart-header">
+                        <h2>Dia da semana que mais vende</h2>
+                        <span>Total vendido</span>
+                    </div>
+                    {% include "dashboards/html/partials/bar_chart_money.html" with rows=weekday_sales empty_text="Nenhuma venda registrada." %}
+                </section>
+
+                <section class="chart-panel">
+                    <div class="chart-header">
+                        <h2>Produto mais vendido</h2>
+                        <span>Quantidade</span>
+                    </div>
+                    {% include "dashboards/html/partials/bar_chart_quantity.html" with rows=top_products empty_text="Nenhum produto vendido." %}
+                </section>
+
+                <section class="chart-panel">
+                    <div class="chart-header">
+                        <h2>Produto com mais lucro</h2>
+                        <span>Lucro bruto</span>
+                    </div>
+                    {% include "dashboards/html/partials/bar_chart_money.html" with rows=top_profit_products empty_text="Nenhum lucro calculado." %}
+                </section>
+
+                <section class="chart-panel">
+                    <div class="chart-header">
+                        <h2>Forma de pagamento mais usada</h2>
+                        <span>Itens vendidos</span>
+                    </div>
+                    {% include "dashboards/html/partials/bar_chart_quantity_total.html" with rows=payment_methods empty_text="Nenhuma forma de pagamento usada." %}
+                </section>
+
+                <section class="chart-panel">
+                    <div class="chart-header">
+                        <h2>Saidas por categoria</h2>
+                        <span>Financeiro</span>
+                    </div>
+                    {% include "dashboards/html/partials/bar_chart_money.html" with rows=expenses_by_category empty_text="Nenhuma saida registrada." %}
+                </section>
+
+                <section class="chart-panel">
+                    <div class="chart-header">
+                        <h2>Faturamento financeiro</h2>
+                        <span>Entradas por data</span>
+                    </div>
+                    {% include "dashboards/html/partials/bar_chart_money.html" with rows=revenue_by_date empty_text="Nenhuma entrada registrada." %}
+                </section>
+
+                <section class="chart-panel wide-panel">
+                    <div class="chart-header">
+                        <h2>Lucro liquido x lucro bruto</h2>
+                        <span>Lucro bruto descontando saidas</span>
+                    </div>
+                    {% include "dashboards/html/partials/bar_chart_money.html" with rows=profit_comparison empty_text="Nenhum lucro calculado." %}
+                </section>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

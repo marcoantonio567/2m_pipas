@@ -1,4 +1,5 @@
 from .client import ClientCreateView, ClientDeleteView, ClientListView, ClientUpdateView
+from .dashboard import DashboardView
 from .financial import (
     CashRegisterView,
     FinancialCategoryCreateView,
@@ -16,6 +17,7 @@ __all__ = [
     "ClientDeleteView",
     "ClientListView",
     "ClientUpdateView",
+    "DashboardView",
     "FinancialCategoryCreateView",
     "FinancialCategoryDeleteView",
     "FinancialCategoryListView",
