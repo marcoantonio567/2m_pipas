@@ -31,6 +31,8 @@ class Client(models.Model):
 
 
 class FinancialCategory(models.Model):
+    PROTECTED_NAME = "venda"
+
     name = models.CharField(max_length=100, unique=True)
 
     class Meta:
@@ -40,6 +42,10 @@ class FinancialCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def is_protected(self):
+        return self.name.strip().casefold() == self.PROTECTED_NAME
 
 
 class Sale(models.Model):

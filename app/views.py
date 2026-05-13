@@ -63,6 +63,7 @@ def client_create(request):
 
 
 def financial_category_list(request):
+    FinancialCategory.objects.get_or_create(name=FinancialCategory.PROTECTED_NAME)
     categories = FinancialCategory.objects.all()
     return render(request, "financeiro_categorias.html", {"categories": categories})
 
@@ -81,6 +82,8 @@ def financial_category_create(request):
 
 def financial_category_update(request, category_id):
     category = get_object_or_404(FinancialCategory, id=category_id)
+    if category.is_protected:
+        return redirect("financeiro_categorias")
 
     if request.method == "POST":
         form = FinancialCategoryForm(request.POST, instance=category)
@@ -95,6 +98,8 @@ def financial_category_update(request, category_id):
 
 def financial_category_delete(request, category_id):
     category = get_object_or_404(FinancialCategory, id=category_id)
+    if category.is_protected:
+        return redirect("financeiro_categorias")
 
     if request.method == "POST":
         category.delete()

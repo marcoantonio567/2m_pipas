@@ -116,6 +116,17 @@
             line-height: 1.25;
         }
 
+        .category-info {
+            display: grid;
+            gap: 6px;
+        }
+
+        .locked-label {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
         .category-actions {
             display: flex;
             flex-wrap: wrap;
@@ -200,11 +211,18 @@
                 <div class="categories">
                     {% for category in categories %}
                         <article class="category">
-                            <h2>{{ category.name }}</h2>
-                            <div class="category-actions">
-                                <a class="action-link" href="{% url 'financeiro_categoria_alterar' category.id %}">Alterar</a>
-                                <a class="action-link delete-link" href="{% url 'financeiro_categoria_excluir' category.id %}">Excluir</a>
+                            <div class="category-info">
+                                <h2>{{ category.name }}</h2>
+                                {% if category.is_protected %}
+                                    <span class="locked-label">Categoria padrao</span>
+                                {% endif %}
                             </div>
+                            {% if not category.is_protected %}
+                                <div class="category-actions">
+                                    <a class="action-link" href="{% url 'financeiro_categoria_alterar' category.id %}">Alterar</a>
+                                    <a class="action-link delete-link" href="{% url 'financeiro_categoria_excluir' category.id %}">Excluir</a>
+                                </div>
+                            {% endif %}
                         </article>
                     {% endfor %}
                 </div>
