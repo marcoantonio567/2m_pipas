@@ -27,10 +27,30 @@
         <section class="content">
             <div class="header">
                 <div>
+                    <span class="eyebrow">Relacionamento</span>
                     <h1>Clientes</h1>
-                    <p>Resumo de compras por cliente.</p>
+                    <p>Acompanhe compras, itens favoritos e historico de cada cliente.</p>
                 </div>
-                <a class="action-link" href="{% url 'cliente_novo' %}">Novo cliente</a>
+                <a class="action-link primary-action" href="{% url 'cliente_novo' %}">Novo cliente</a>
+            </div>
+
+            <div class="summary" aria-label="Resumo de clientes">
+                <article class="summary-card clients-total">
+                    <span>Clientes</span>
+                    <strong>{{ total_clients }}</strong>
+                </article>
+                <article class="summary-card active-total">
+                    <span>Com compras</span>
+                    <strong>{{ clients_with_sales }}</strong>
+                </article>
+                <article class="summary-card items-total">
+                    <span>Itens comprados</span>
+                    <strong>{{ total_items_purchased }}</strong>
+                </article>
+                <article class="summary-card spent-total">
+                    <span>Total comprado</span>
+                    <strong>R$ {{ total_clients_spent|floatformat:2 }}</strong>
+                </article>
             </div>
 
             {% if clients %}
@@ -49,14 +69,25 @@
                         <tbody>
                             {% for client in clients %}
                                 <tr>
-                                    <td class="client-name">{{ client.name }}</td>
-                                    <td>{{ client.age }}</td>
-                                    <td>{{ client.total_quantity }}</td>
-                                    <td>{{ client.most_purchased_item }}</td>
-                                    <td class="money">R$ {{ client.total_spent|floatformat:2 }}</td>
-                                    <td>
+                                    <td data-label="Nome">
+                                        <div class="client-cell">
+                                            <span class="client-avatar">C</span>
+                                            <strong>{{ client.name }}</strong>
+                                        </div>
+                                    </td>
+                                    <td data-label="Idade">
+                                        {% if client.age %}
+                                            <span class="age-pill">{{ client.age }} anos</span>
+                                        {% else %}
+                                            <span class="muted-pill">Nao informado</span>
+                                        {% endif %}
+                                    </td>
+                                    <td data-label="Qtd. comprada"><span class="quantity-pill">{{ client.total_quantity }}</span></td>
+                                    <td data-label="Item favorito"><span class="favorite-pill">{{ client.most_purchased_item }}</span></td>
+                                    <td class="money" data-label="Total comprado">R$ {{ client.total_spent|floatformat:2 }}</td>
+                                    <td data-label="Acoes">
                                         <div class="row-actions">
-                                            <a class="action-link" href="{% url 'cliente_alterar' client.id %}">Alterar</a>
+                                            <a class="action-link secondary-action" href="{% url 'cliente_alterar' client.id %}">Alterar</a>
                                             <a class="action-link delete-link" href="{% url 'cliente_excluir' client.id %}">Excluir</a>
                                         </div>
                                     </td>
@@ -66,7 +97,10 @@
                     </table>
                 </div>
             {% else %}
-                <div class="empty">Nenhum cliente cadastrado.</div>
+                <div class="empty">
+                    <strong>Nenhum cliente cadastrado.</strong>
+                    <span>Cadastre o primeiro cliente para acompanhar compras e preferencias.</span>
+                </div>
             {% endif %}
         </section>
     </main>

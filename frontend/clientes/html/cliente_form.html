@@ -26,12 +26,21 @@
 
         <section class="content">
             <div class="header">
+                <span class="eyebrow">Clientes</span>
                 <h1>{% if client %}Alterar cliente{% else %}Novo cliente{% endif %}</h1>
-                <p>{% if client %}{{ client.name }}{% else %}Cadastre nome e idade do cliente.{% endif %}</p>
+                <p>{% if client %}Atualize as informacoes de {{ client.name }}.{% else %}Cadastre os dados principais para vincular vendas e preferencias.{% endif %}</p>
             </div>
 
             <form class="form-panel" method="post">
                 {% csrf_token %}
+
+                <div class="form-intro">
+                    <span class="form-icon">C</span>
+                    <div>
+                        <strong>Informacoes do cliente</strong>
+                        <span>Mantenha o cadastro simples para agilizar novas vendas.</span>
+                    </div>
+                </div>
 
                 {% for field in form %}
                     <div class="form-row">

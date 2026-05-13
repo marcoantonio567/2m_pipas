@@ -27,9 +27,13 @@
         <section class="content">
             <form class="confirm-panel" method="post">
                 {% csrf_token %}
+                <span class="warning-icon">!</span>
                 <h1>Excluir cliente</h1>
-                <p>Confirme para remover este cliente e o historico de vendas dele.</p>
-                <div class="client-name">{{ client.name }}</div>
+                <p>Confirme para remover este cliente e o historico de vendas vinculado a ele.</p>
+                <div class="client-name">
+                    <span>Cliente selecionado</span>
+                    <strong>{{ client.name }}</strong>
+                </div>
 
                 <div class="actions">
                     <button class="button button-danger" type="submit">Excluir cliente</button>

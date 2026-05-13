@@ -14,6 +14,16 @@ class ClientListView(ListView):
     template_name = "clientes/html/clientes.html"
     context_object_name = "clients"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        clients = context["clients"]
+
+        context["total_clients"] = len(clients)
+        context["clients_with_sales"] = sum(1 for client in clients if client.total_quantity)
+        context["total_items_purchased"] = sum(client.total_quantity for client in clients)
+        context["total_clients_spent"] = sum(client.total_spent for client in clients)
+        return context
+
     def get_queryset(self):
         total_spent = ExpressionWrapper(
             F("sales__items__quantity") * F("sales__items__unit_price"),
