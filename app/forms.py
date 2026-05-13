@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Client, FinancialCategory, FinancialTransaction, Product
+from .models import Client, FinancialCategory, FinancialTransaction, Product, Sale
 
 
 class ClientForm(forms.ModelForm):
@@ -22,6 +22,68 @@ class ClientForm(forms.ModelForm):
                 }
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["age"].required = False
+
+
+class SaleForm(forms.Form):
+    product = forms.ModelChoiceField(
+        queryset=Product.objects.order_by("name"),
+        label="Produto",
+        empty_label="Escolha um produto",
+        widget=forms.Select(attrs={"class": "field"}),
+    )
+    quantity = forms.IntegerField(
+        label="Quantidade",
+        min_value=1,
+        initial=1,
+        widget=forms.NumberInput(
+            attrs={
+                "class": "field",
+                "min": "1",
+            }
+        ),
+    )
+    client = forms.ModelChoiceField(
+        queryset=Client.objects.order_by("name"),
+        label="Cliente cadastrado",
+        required=False,
+        empty_label="Cadastrar novo cliente pelo nome abaixo",
+        widget=forms.Select(attrs={"class": "field"}),
+    )
+    client_name = forms.CharField(
+        label="Nome do cliente novo",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "field",
+                "placeholder": "Nome do cliente",
+            }
+        ),
+    )
+    payment_method = forms.ChoiceField(
+        label="Forma de pagamento",
+        choices=Sale.PAYMENT_METHOD_CHOICES,
+        widget=forms.Select(attrs={"class": "field"}),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        client = cleaned_data.get("client")
+        client_name = (cleaned_data.get("client_name") or "").strip()
+        product = cleaned_data.get("product")
+        quantity = cleaned_data.get("quantity")
+
+        if not client and not client_name:
+            self.add_error("client_name", "Informe um cliente cadastrado ou digite o nome do novo cliente.")
+
+        if product and quantity and quantity > product.quantity:
+            self.add_error("quantity", f"Estoque insuficiente. Disponivel: {product.quantity}.")
+
+        cleaned_data["client_name"] = client_name
+        return cleaned_data
 
 
 class ProductForm(forms.ModelForm):

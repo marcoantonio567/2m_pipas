@@ -28,7 +28,7 @@ class Product(models.Model):
 
 class Client(models.Model):
     name = models.CharField(max_length=100)
-    age = models.CharField(max_length=3)
+    age = models.CharField(max_length=3, blank=True)
 
     def __str__(self):
         return self.name
@@ -85,11 +85,29 @@ class FinancialTransaction(models.Model):
 
 
 class Sale(models.Model):
+    PIX = "pix"
+    CASH = "dinheiro"
+    CARD = "cartao"
+    PAYMENT_METHOD_CHOICES = [
+        (PIX, "Pix"),
+        (CASH, "Dinheiro"),
+        (CARD, "Cartao"),
+    ]
+
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="sales")
+    payment_method = models.CharField(
+        max_length=8,
+        choices=PAYMENT_METHOD_CHOICES,
+        default=PIX,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Venda #{self.id} - {self.client.name}"
+
+    @property
+    def total_price(self):
+        return sum(item.total_price for item in self.items.all())
 
 
 class SaleItem(models.Model):

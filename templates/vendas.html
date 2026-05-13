@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2M Pipas - Vendas</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --background: #f4f7fb;
+            --surface: #ffffff;
+            --primary: #0f766e;
+            --primary-dark: #115e59;
+            --text: #172033;
+            --muted: #667085;
+            --border: #d8e1ec;
+            --soft: #e7f6f4;
+            --shadow: 0 18px 45px rgba(23, 32, 51, 0.10);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background: var(--background);
+        }
+
+        .page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+        }
+
+        .sidebar {
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 28px 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .brand { margin-bottom: 34px; }
+        .brand strong { display: block; font-size: 24px; line-height: 1.1; }
+        .brand span { display: block; margin-top: 6px; color: var(--muted); font-size: 14px; }
+
+        .menu {
+            display: grid;
+            gap: 10px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 14px 16px;
+            border-radius: 8px;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 700;
+            border: 1px solid transparent;
+        }
+
+        .menu a:hover,
+        .menu a:focus,
+        .menu a.active {
+            color: var(--primary-dark);
+            background: var(--soft);
+            border-color: #b8e1dc;
+            outline: none;
+        }
+
+        .content { padding: 44px; }
+
+        .header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .header h1 { margin: 0 0 8px; font-size: 34px; line-height: 1.15; }
+        .header p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.5; }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+            padding: 0 14px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            background: var(--primary);
+            color: #ffffff;
+            font: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .button:hover,
+        .button:focus {
+            background: var(--primary-dark);
+            outline: none;
+        }
+
+        .button-secondary {
+            background: #ffffff;
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .button-secondary:hover,
+        .button-secondary:focus {
+            color: var(--primary-dark);
+            border-color: #b8e1dc;
+            background: #ffffff;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .summary-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.06);
+        }
+
+        .summary-item span {
+            display: block;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .summary-item strong {
+            display: block;
+            margin-top: 8px;
+            color: var(--primary-dark);
+            font-size: 26px;
+            line-height: 1.1;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: minmax(220px, 1fr) 220px auto auto;
+            gap: 10px;
+            align-items: end;
+            margin-bottom: 18px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+        }
+
+        .filter-field label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .field {
+            width: 100%;
+            min-height: 40px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 9px 12px;
+            color: var(--text);
+            font: inherit;
+            background: #ffffff;
+        }
+
+        .field:focus {
+            border-color: var(--primary);
+            outline: 3px solid #c7ebe7;
+        }
+
+        .table-panel {
+            overflow: hidden;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        th {
+            color: var(--muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            background: #f9fbfd;
+        }
+
+        tbody tr:hover {
+            background: #fbfdfd;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .sale-id {
+            color: var(--primary-dark);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .client-name,
+        .amount {
+            font-weight: 700;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            min-height: 28px;
+            padding: 0 10px;
+            border-radius: 999px;
+            color: var(--primary-dark);
+            background: var(--soft);
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .empty {
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--muted);
+        }
+
+        @media (max-width: 980px) {
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .page { grid-template-columns: 1fr; }
+            .sidebar { border-right: 0; border-bottom: 1px solid var(--border); box-shadow: none; }
+            .content { padding: 28px 22px; }
+            .header { display: block; }
+            .header h1 { font-size: 28px; }
+            .header .button { margin-top: 16px; }
+            .filters { grid-template-columns: 1fr; }
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                padding: 14px;
+                border-bottom: 1px solid var(--border);
+            }
+
+            tbody tr:last-child {
+                border-bottom: 0;
+            }
+
+            td {
+                display: grid;
+                grid-template-columns: 120px 1fr;
+                gap: 10px;
+                padding: 8px 0;
+                border-bottom: 0;
+            }
+
+            td::before {
+                content: attr(data-label);
+                color: var(--muted);
+                font-size: 12px;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <aside class="sidebar" aria-label="Menu principal">
+            <div class="brand">
+                <strong>2M Pipas</strong>
+                <span>Sistema de gestao</span>
+            </div>
+
+            <nav class="menu">
+                <a href="{% url 'produtos' %}">Produtos</a>
+                <a href="{% url 'clientes' %}">Clientes</a>
+                <a class="active" href="{% url 'vendas' %}">Vendas</a>
+                <a href="{% url 'financeiro_caixa' %}">Financeiro</a>
+            </nav>
+        </aside>
+
+        <section class="content">
+            <div class="header">
+                <div>
+                    <h1>Vendas</h1>
+                    <p>Consulte vendas por cliente, produto, numero ou forma de pagamento.</p>
+                </div>
+                <a class="button" href="{% url 'venda_nova' %}">Nova venda</a>
+            </div>
+
+            <div class="summary" aria-label="Resumo das vendas exibidas">
+                <div class="summary-item">
+                    <span>Vendas exibidas</span>
+                    <strong>{{ sales|length }}</strong>
+                </div>
+                <div class="summary-item">
+                    <span>Itens vendidos</span>
+                    <strong>{{ total_items }}</strong>
+                </div>
+                <div class="summary-item">
+                    <span>Total vendido</span>
+                    <strong>R$ {{ total_revenue|floatformat:2 }}</strong>
+                </div>
+            </div>
+
+            <form class="filters" method="get">
+                <div class="filter-field">
+                    <label for="q">Buscar</label>
+                    <input class="field" id="q" name="q" type="search" value="{{ query }}" placeholder="Cliente, produto ou numero">
+                </div>
+
+                <div class="filter-field">
+                    <label for="pagamento">Pagamento</label>
+                    <select class="field" id="pagamento" name="pagamento">
+                        <option value="">Todos</option>
+                        {% for value, label in payment_methods %}
+                            <option value="{{ value }}"{% if selected_payment_method == value %} selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button class="button" type="submit">Filtrar</button>
+                <a class="button button-secondary" href="{% url 'vendas' %}">Limpar</a>
+            </form>
+
+            {% if sales %}
+                <div class="table-panel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Venda</th>
+                                <th>Cliente</th>
+                                <th>Produtos</th>
+                                <th>Pagamento</th>
+                                <th>Data</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sale in sales %}
+                                <tr>
+                                    <td data-label="Venda">
+                                        <span class="sale-id">#{{ sale.id }}</span>
+                                    </td>
+                                    <td data-label="Cliente">
+                                        <span class="client-name">{{ sale.client.name }}</span>
+                                    </td>
+                                    <td data-label="Produtos">
+                                        <span>{{ sale.items_summary }}</span>
+                                    </td>
+                                    <td data-label="Pagamento">
+                                        <span class="badge">{{ sale.get_payment_method_display }}</span>
+                                    </td>
+                                    <td data-label="Data">
+                                        <time datetime="{{ sale.created_at|date:'c' }}">{{ sale.created_at|date:"d/m/Y H:i" }}</time>
+                                    </td>
+                                    <td data-label="Total">
+                                        <span class="amount">R$ {{ sale.total_price|floatformat:2 }}</span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty">Nenhuma venda encontrada.</div>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

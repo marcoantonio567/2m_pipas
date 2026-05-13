@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import FinancialCategory, FinancialTransaction
+from .models import Client, FinancialCategory, FinancialTransaction, Product, Sale, SaleItem
 
 
 class FinancialCategoryTests(TestCase):
@@ -68,3 +68,70 @@ class FinancialCategoryTests(TestCase):
         self.assertContains(response, "R$ 100.00")
         self.assertContains(response, "R$ 35.50")
         self.assertContains(response, "R$ 64.50")
+
+
+class SaleTests(TestCase):
+    def test_sale_create_registers_new_client_payment_financial_entry_and_stock(self):
+        product = Product.objects.create(
+            name="Pipa colorida",
+            description="Pipa pronta",
+            quantity=5,
+            cost_price="4.00",
+            price="10.00",
+        )
+
+        response = self.client.post(
+            reverse("venda_nova"),
+            {
+                "product": product.id,
+                "quantity": 2,
+                "client": "",
+                "client_name": "Maria",
+                "payment_method": Sale.CARD,
+            },
+        )
+
+        self.assertRedirects(response, reverse("vendas"))
+        client = Client.objects.get(name="Maria")
+        sale = Sale.objects.get(client=client)
+        sale_item = SaleItem.objects.get(sale=sale)
+        product.refresh_from_db()
+
+        self.assertEqual(sale.payment_method, Sale.CARD)
+        self.assertEqual(sale_item.product, product)
+        self.assertEqual(sale_item.quantity, 2)
+        self.assertEqual(sale_item.unit_price, product.price)
+        self.assertEqual(product.quantity, 3)
+        self.assertTrue(
+            FinancialTransaction.objects.filter(
+                type=FinancialTransaction.INCOME,
+                category__name=FinancialCategory.PROTECTED_NAME,
+                amount="20.00",
+                description__contains="Cartao",
+            ).exists()
+        )
+
+    def test_sale_create_uses_existing_client_when_selected(self):
+        client = Client.objects.create(name="Joao", age="30")
+        product = Product.objects.create(
+            name="Linha",
+            description="Linha resistente",
+            quantity=3,
+            cost_price="2.00",
+            price="7.50",
+        )
+
+        response = self.client.post(
+            reverse("venda_nova"),
+            {
+                "product": product.id,
+                "quantity": 1,
+                "client": client.id,
+                "client_name": "Outro nome",
+                "payment_method": Sale.PIX,
+            },
+        )
+
+        self.assertRedirects(response, reverse("vendas"))
+        self.assertEqual(Client.objects.count(), 1)
+        self.assertTrue(Sale.objects.filter(client=client, payment_method=Sale.PIX).exists())

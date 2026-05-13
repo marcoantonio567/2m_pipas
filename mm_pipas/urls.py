@@ -33,6 +33,8 @@ from app.views import (
     product_delete,
     product_list,
     product_update,
+    sale_create,
+    sale_list,
 )
 
 urlpatterns = [
@@ -43,6 +45,8 @@ urlpatterns = [
     path('clientes/novo/', client_create, name='cliente_novo'),
     path('clientes/<int:client_id>/alterar/', client_update, name='cliente_alterar'),
     path('clientes/<int:client_id>/excluir/', client_delete, name='cliente_excluir'),
+    path('vendas/', sale_list, name='vendas'),
+    path('vendas/nova/', sale_create, name='venda_nova'),
     path('produtos/<int:product_id>/alterar/', product_update, name='produto_alterar'),
     path('produtos/<int:product_id>/excluir/', product_delete, name='produto_excluir'),
     path('financeiro/', cash_register, name='financeiro_caixa'),
