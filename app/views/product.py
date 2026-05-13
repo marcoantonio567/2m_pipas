@@ -1,0 +1,41 @@
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+
+from app.forms import ProductForm
+from app.models import Product
+
+
+class ProductListView(ListView):
+    model = Product
+    template_name = "produtos.html"
+    context_object_name = "products"
+    ordering = ["name"]
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = "produto_form.html"
+    success_url = reverse_lazy("produtos")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["product"] = None
+        return context
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = "produto_form.html"
+    context_object_name = "product"
+    pk_url_kwarg = "product_id"
+    success_url = reverse_lazy("produtos")
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = "produto_confirm_delete.html"
+    context_object_name = "product"
+    pk_url_kwarg = "product_id"
+    success_url = reverse_lazy("produtos")
