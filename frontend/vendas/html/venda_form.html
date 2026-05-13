@@ -38,7 +38,12 @@
                         {{ field.label_tag }}
                         {{ field }}
                         {% if field.name == "client_name" %}
-                            <p class="help">Se o cliente ainda nao existir, deixe o seletor acima em branco e digite o nome aqui.</p>
+                            <datalist id="client-options">
+                                {% for client in clients %}
+                                    <option value="{{ client.name }}"></option>
+                                {% endfor %}
+                            </datalist>
+                            <p class="help">Digite para buscar um cliente cadastrado ou informe um novo nome para cadastrar junto com a venda.</p>
                         {% endif %}
                         {% if field.errors %}
                             <ul class="errors">

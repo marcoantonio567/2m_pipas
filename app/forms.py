@@ -46,19 +46,13 @@ class SaleForm(forms.Form):
             }
         ),
     )
-    client = forms.ModelChoiceField(
-        queryset=Client.objects.order_by("name"),
-        label="Cliente cadastrado",
-        required=False,
-        empty_label="Cadastrar novo cliente pelo nome abaixo",
-        widget=forms.Select(attrs={"class": "field"}),
-    )
     client_name = forms.CharField(
-        label="Nome do cliente novo",
-        required=False,
+        label="Cliente",
         widget=forms.TextInput(
             attrs={
                 "class": "field",
+                "list": "client-options",
+                "autocomplete": "off",
                 "placeholder": "Nome do cliente",
             }
         ),
@@ -71,13 +65,12 @@ class SaleForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        client = cleaned_data.get("client")
         client_name = (cleaned_data.get("client_name") or "").strip()
         product = cleaned_data.get("product")
         quantity = cleaned_data.get("quantity")
 
-        if not client and not client_name:
-            self.add_error("client_name", "Informe um cliente cadastrado ou digite o nome do novo cliente.")
+        if not client_name:
+            self.add_error("client_name", "Informe o nome do cliente.")
 
         if product and quantity and quantity > product.quantity:
             self.add_error("quantity", f"Estoque insuficiente. Disponivel: {product.quantity}.")

@@ -54,6 +54,11 @@ class SaleCreateView(FormView):
     form_class = SaleForm
     template_name = "vendas/html/venda_form.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["clients"] = Client.objects.order_by("name")
+        return context
+
     def form_valid(self, form):
         with transaction.atomic():
             product = Product.objects.select_for_update().get(id=form.cleaned_data["product"].id)
@@ -81,11 +86,7 @@ class SaleCreateView(FormView):
         return redirect("vendas")
 
     def get_or_create_client(self, form):
-        client = form.cleaned_data["client"]
         client_name = form.cleaned_data["client_name"]
-
-        if client is not None:
-            return client
 
         client = Client.objects.filter(name__iexact=client_name).first()
         if client is None:

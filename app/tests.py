@@ -85,7 +85,6 @@ class SaleTests(TestCase):
             {
                 "product": product.id,
                 "quantity": 2,
-                "client": "",
                 "client_name": "Maria",
                 "payment_method": Sale.CARD,
             },
@@ -126,8 +125,7 @@ class SaleTests(TestCase):
             {
                 "product": product.id,
                 "quantity": 1,
-                "client": client.id,
-                "client_name": "Outro nome",
+                "client_name": "Joao",
                 "payment_method": Sale.PIX,
             },
         )
