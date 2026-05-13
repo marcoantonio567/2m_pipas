@@ -91,28 +91,44 @@
             line-height: 1.5;
         }
 
-        .categories {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 16px;
-        }
-
-        .category {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 14px;
-            min-height: 88px;
+        .category-list {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 18px;
             box-shadow: 0 10px 24px rgba(23, 32, 51, 0.06);
+            overflow: hidden;
+        }
+
+        .category-list-header,
+        .category {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 16px;
+            align-items: center;
+            padding: 16px 18px;
+        }
+
+        .category-list-header {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category {
+            min-height: 72px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category:last-child {
+            border-bottom: 0;
         }
 
         .category h2 {
             margin: 0;
-            font-size: 20px;
+            font-size: 18px;
             line-height: 1.25;
         }
 
@@ -122,6 +138,19 @@
         }
 
         .locked-label {
+            width: max-content;
+            min-height: 28px;
+            display: inline-flex;
+            align-items: center;
+            padding: 0 10px;
+            border-radius: 999px;
+            background: #e7f6f4;
+            color: var(--primary-dark);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .category-status {
             color: var(--muted);
             font-size: 13px;
             font-weight: 700;
@@ -178,7 +207,12 @@
             .header { display: block; }
             .header h1 { font-size: 28px; }
             .header .action-link { margin-top: 16px; }
-            .category { align-items: flex-start; flex-direction: column; }
+            .category-list-header { display: none; }
+            .category {
+                grid-template-columns: 1fr;
+                align-items: flex-start;
+            }
+            .category-actions { justify-content: flex-start; }
         }
     </style>
 </head>
@@ -211,13 +245,19 @@
             </div>
 
             {% if categories %}
-                <div class="categories">
+                <div class="category-list">
+                    <div class="category-list-header">
+                        <span>Categoria</span>
+                        <span>Acoes</span>
+                    </div>
                     {% for category in categories %}
                         <article class="category">
                             <div class="category-info">
                                 <h2>{{ category.name }}</h2>
                                 {% if category.is_protected %}
                                     <span class="locked-label">Categoria padrao</span>
+                                {% else %}
+                                    <span class="category-status">Categoria personalizada</span>
                                 {% endif %}
                             </div>
                             {% if not category.is_protected %}
@@ -225,6 +265,8 @@
                                     <a class="action-link" href="{% url 'financeiro_categoria_alterar' category.id %}">Alterar</a>
                                     <a class="action-link delete-link" href="{% url 'financeiro_categoria_excluir' category.id %}">Excluir</a>
                                 </div>
+                            {% else %}
+                                <span class="category-status">Protegida</span>
                             {% endif %}
                         </article>
                     {% endfor %}
