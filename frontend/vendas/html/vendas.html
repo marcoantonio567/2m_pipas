@@ -16,10 +16,11 @@
             </div>
 
             <nav class="menu">
-                <a href="{% url 'produtos' %}">Produtos</a>
-                <a href="{% url 'clientes' %}">Clientes</a>
-                <a class="active" href="{% url 'vendas' %}">Vendas</a>
-                <a href="{% url 'financeiro_caixa' %}">Financeiro</a>
+                <a href="{% url 'menu' %}"><span>I</span><strong>Inicio</strong></a>
+                <a href="{% url 'produtos' %}"><span>P</span><strong>Produtos</strong></a>
+                <a href="{% url 'clientes' %}"><span>C</span><strong>Clientes</strong></a>
+                <a class="active" href="{% url 'vendas' %}"><span>V</span><strong>Vendas</strong></a>
+                <a href="{% url 'financeiro_caixa' %}"><span>F</span><strong>Financeiro</strong></a>
             </nav>
         </aside>
 

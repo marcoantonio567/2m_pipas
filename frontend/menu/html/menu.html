@@ -16,17 +16,87 @@
             </div>
 
             <nav class="menu">
-                <a href="{% url 'produtos' %}">Produtos</a>
-                <a href="{% url 'clientes' %}">Clientes</a>
-                <a href="{% url 'vendas' %}">Vendas</a>
-                <a href="{% url 'financeiro_caixa' %}">Financeiro</a>
+                <a class="active" href="{% url 'menu' %}">
+                    <span class="menu-icon">I</span>
+                    <span>
+                        <strong>Inicio</strong>
+                        <small>Visao geral</small>
+                    </span>
+                </a>
+                <a href="{% url 'vendas' %}">
+                    <span class="menu-icon">V</span>
+                    <span>
+                        <strong>Vendas</strong>
+                        <small>Registrar e consultar</small>
+                    </span>
+                </a>
+                <a href="{% url 'produtos' %}">
+                    <span class="menu-icon">P</span>
+                    <span>
+                        <strong>Produtos</strong>
+                        <small>Estoque e precos</small>
+                    </span>
+                </a>
+                <a href="{% url 'clientes' %}">
+                    <span class="menu-icon">C</span>
+                    <span>
+                        <strong>Clientes</strong>
+                        <small>Cadastro e historico</small>
+                    </span>
+                </a>
+                <a href="{% url 'financeiro_caixa' %}">
+                    <span class="menu-icon">F</span>
+                    <span>
+                        <strong>Financeiro</strong>
+                        <small>Caixa e categorias</small>
+                    </span>
+                </a>
             </nav>
         </aside>
 
         <section class="content">
             <div class="welcome">
-                <h1>Bem-vindo ao sistema</h1>
-                <p>Escolha uma opcao no menu para acessar as areas de produtos, clientes, vendas e financeiro.</p>
+                <p class="eyebrow">Menu principal</p>
+                <h1>O que voce quer fazer agora?</h1>
+                <p>Use os atalhos abaixo para ir direto para as tarefas mais usadas no sistema.</p>
+
+                <div class="quick-actions" aria-label="Atalhos principais">
+                    <a class="quick-card primary-card" href="{% url 'venda_nova' %}">
+                        <span class="card-icon">+</span>
+                        <span>
+                            <strong>Nova venda</strong>
+                            <small>Registre uma venda e atualize o estoque.</small>
+                        </span>
+                    </a>
+                    <a class="quick-card" href="{% url 'produtos' %}">
+                        <span class="card-icon">P</span>
+                        <span>
+                            <strong>Ver produtos</strong>
+                            <small>Consulte quantidades, custos e precos.</small>
+                        </span>
+                    </a>
+                    <a class="quick-card" href="{% url 'clientes' %}">
+                        <span class="card-icon">C</span>
+                        <span>
+                            <strong>Ver clientes</strong>
+                            <small>Acompanhe compras e cadastros.</small>
+                        </span>
+                    </a>
+                    <a class="quick-card" href="{% url 'financeiro_caixa' %}">
+                        <span class="card-icon">F</span>
+                        <span>
+                            <strong>Abrir caixa</strong>
+                            <small>Veja entradas, saidas e saldo.</small>
+                        </span>
+                    </a>
+                </div>
+
+                <div class="secondary-actions" aria-label="Atalhos secundarios">
+                    <a href="{% url 'produto_novo' %}">Novo produto</a>
+                    <a href="{% url 'cliente_novo' %}">Novo cliente</a>
+                    <a href="{% url 'financeiro_movimentacao_nova' %}">Nova movimentacao</a>
+                    <a href="{% url 'financeiro_categorias' %}">Categorias</a>
+                </div>
             </div>
         </section>
     </main>

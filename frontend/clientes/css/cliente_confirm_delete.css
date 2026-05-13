@@ -79,6 +79,37 @@
             outline: none;
         }
 
+        .menu {
+            gap: 8px;
+        }
+
+        .menu a {
+            display: grid;
+            grid-template-columns: 34px 1fr;
+            align-items: center;
+            gap: 10px;
+            min-height: 54px;
+            padding: 9px 10px;
+        }
+
+        .menu a span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            color: var(--primary-dark);
+            background: #dff3f0;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .menu a strong {
+            font-size: 15px;
+            line-height: 1.2;
+        }
+
         .content {
             padding: 44px;
         }
