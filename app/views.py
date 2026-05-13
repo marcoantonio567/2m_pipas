@@ -1,9 +1,9 @@
-from django.db.models import DecimalField, ExpressionWrapper, F, Sum
+from django.db.models import DecimalField, ExpressionWrapper, F, Q, Sum
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import ClientForm, FinancialCategoryForm, ProductForm
-from .models import Client, FinancialCategory, Product, SaleItem
+from .forms import ClientForm, FinancialCategoryForm, FinancialTransactionForm, ProductForm
+from .models import Client, FinancialCategory, FinancialTransaction, Product, SaleItem
 
 
 def product_list(request):
@@ -66,6 +66,46 @@ def financial_category_list(request):
     FinancialCategory.objects.get_or_create(name=FinancialCategory.PROTECTED_NAME)
     categories = FinancialCategory.objects.all()
     return render(request, "financeiro_categorias.html", {"categories": categories})
+
+
+def cash_register(request):
+    FinancialCategory.objects.get_or_create(name=FinancialCategory.PROTECTED_NAME)
+    transactions = FinancialTransaction.objects.select_related("category")
+    totals = transactions.aggregate(
+        income=Coalesce(
+            Sum("amount", filter=Q(type=FinancialTransaction.INCOME)),
+            0,
+            output_field=DecimalField(max_digits=12, decimal_places=2),
+        ),
+        expense=Coalesce(
+            Sum("amount", filter=Q(type=FinancialTransaction.EXPENSE)),
+            0,
+            output_field=DecimalField(max_digits=12, decimal_places=2),
+        ),
+    )
+    totals["balance"] = totals["income"] - totals["expense"]
+
+    return render(
+        request,
+        "financeiro_caixa.html",
+        {
+            "transactions": transactions,
+            "totals": totals,
+        },
+    )
+
+
+def financial_transaction_create(request):
+    FinancialCategory.objects.get_or_create(name=FinancialCategory.PROTECTED_NAME)
+    if request.method == "POST":
+        form = FinancialTransactionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("financeiro_caixa")
+    else:
+        form = FinancialTransactionForm()
+
+    return render(request, "financeiro_movimentacao_form.html", {"form": form})
 
 
 def financial_category_create(request):

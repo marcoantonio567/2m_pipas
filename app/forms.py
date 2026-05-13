@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Client, FinancialCategory, Product
+from .models import Client, FinancialCategory, FinancialTransaction, Product
 
 
 class ClientForm(forms.ModelForm):
@@ -84,4 +84,36 @@ class FinancialCategoryForm(forms.ModelForm):
                     "placeholder": "Nome da categoria",
                 }
             ),
+        }
+
+
+class FinancialTransactionForm(forms.ModelForm):
+    class Meta:
+        model = FinancialTransaction
+        fields = ["type", "category", "description", "amount", "date"]
+        labels = {
+            "type": "Tipo",
+            "category": "Categoria",
+            "description": "Descricao",
+            "amount": "Valor",
+            "date": "Data",
+        }
+        widgets = {
+            "type": forms.Select(attrs={"class": "field"}),
+            "category": forms.Select(attrs={"class": "field"}),
+            "description": forms.TextInput(
+                attrs={
+                    "class": "field",
+                    "placeholder": "Descricao da movimentacao",
+                }
+            ),
+            "amount": forms.NumberInput(
+                attrs={
+                    "class": "field",
+                    "placeholder": "0.00",
+                    "step": "0.01",
+                    "min": "0.01",
+                }
+            ),
+            "date": forms.DateInput(attrs={"class": "field", "type": "date"}),
         }

@@ -19,6 +19,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from app.views import (
+    cash_register,
     client_create,
     client_delete,
     client_list,
@@ -27,6 +28,7 @@ from app.views import (
     financial_category_delete,
     financial_category_list,
     financial_category_update,
+    financial_transaction_create,
     product_create,
     product_delete,
     product_list,
@@ -43,6 +45,8 @@ urlpatterns = [
     path('clientes/<int:client_id>/excluir/', client_delete, name='cliente_excluir'),
     path('produtos/<int:product_id>/alterar/', product_update, name='produto_alterar'),
     path('produtos/<int:product_id>/excluir/', product_delete, name='produto_excluir'),
+    path('financeiro/', cash_register, name='financeiro_caixa'),
+    path('financeiro/movimentacoes/nova/', financial_transaction_create, name='financeiro_movimentacao_nova'),
     path('financeiro/categorias/', financial_category_list, name='financeiro_categorias'),
     path('financeiro/categorias/nova/', financial_category_create, name='financeiro_categoria_nova'),
     path('financeiro/categorias/<int:category_id>/alterar/', financial_category_update, name='financeiro_categoria_alterar'),

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Client, FinancialCategory, Product, Sale, SaleItem
+from .models import Client, FinancialCategory, FinancialTransaction, Product, Sale, SaleItem
 
 
 class SaleItemInline(admin.TabularInline):
@@ -16,4 +16,5 @@ class SaleAdmin(admin.ModelAdmin):
 
 admin.site.register(Client)
 admin.site.register(FinancialCategory)
+admin.site.register(FinancialTransaction)
 admin.site.register(Product)

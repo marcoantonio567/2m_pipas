@@ -194,7 +194,7 @@
                 <a href="{% url 'produtos' %}">Produtos</a>
                 <a href="{% url 'clientes' %}">Clientes</a>
                 <a href="#">Vendas</a>
-                <a class="active" href="{% url 'financeiro_categorias' %}">Financeiro</a>
+                <a class="active" href="{% url 'financeiro_caixa' %}">Financeiro</a>
             </nav>
         </aside>
 
@@ -204,7 +204,10 @@
                     <h1>Financeiro</h1>
                     <p>Categorias cadastradas para organizar o financeiro.</p>
                 </div>
-                <a class="action-link" href="{% url 'financeiro_categoria_nova' %}">Nova categoria</a>
+                <div class="category-actions">
+                    <a class="action-link" href="{% url 'financeiro_caixa' %}">Caixa</a>
+                    <a class="action-link" href="{% url 'financeiro_categoria_nova' %}">Nova categoria</a>
+                </div>
             </div>
 
             {% if categories %}
