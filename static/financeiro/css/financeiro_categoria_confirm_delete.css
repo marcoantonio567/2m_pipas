@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2M Pipas - Excluir Categoria</title>
-    <style>
-        :root {
+﻿:root {
             color-scheme: light;
             --background: #f4f7fb;
             --surface: #ffffff;
@@ -158,37 +151,3 @@
             .content { padding: 28px 22px; }
             h1 { font-size: 28px; }
         }
-    </style>
-</head>
-<body>
-    <main class="page">
-        <aside class="sidebar" aria-label="Menu principal">
-            <div class="brand">
-                <strong>2M Pipas</strong>
-                <span>Sistema de gestao</span>
-            </div>
-
-            <nav class="menu">
-                <a href="{% url 'produtos' %}">Produtos</a>
-                <a href="{% url 'clientes' %}">Clientes</a>
-                <a href="{% url 'vendas' %}">Vendas</a>
-                <a class="active" href="{% url 'financeiro_caixa' %}">Financeiro</a>
-            </nav>
-        </aside>
-
-        <section class="content">
-            <form class="confirm-panel" method="post">
-                {% csrf_token %}
-                <h1>Excluir categoria</h1>
-                <p>Confirme para remover esta categoria financeira.</p>
-                <div class="category-name">{{ category.name }}</div>
-
-                <div class="actions">
-                    <button class="button button-danger" type="submit">Excluir categoria</button>
-                    <a class="button button-secondary" href="{% url 'financeiro_categorias' %}">Cancelar</a>
-                </div>
-            </form>
-        </section>
-    </main>
-</body>
-</html>

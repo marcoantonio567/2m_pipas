@@ -15,7 +15,7 @@ class DefaultFinancialCategoryMixin:
 
 class FinancialCategoryListView(DefaultFinancialCategoryMixin, ListView):
     model = FinancialCategory
-    template_name = "financeiro_categorias.html"
+    template_name = "financeiro/html/financeiro_categorias.html"
     context_object_name = "categories"
 
     def get_queryset(self):
@@ -24,7 +24,7 @@ class FinancialCategoryListView(DefaultFinancialCategoryMixin, ListView):
 
 
 class CashRegisterView(DefaultFinancialCategoryMixin, TemplateView):
-    template_name = "financeiro_caixa.html"
+    template_name = "financeiro/html/financeiro_caixa.html"
 
     def get_context_data(self, **kwargs):
         self.ensure_default_category()
@@ -51,7 +51,7 @@ class CashRegisterView(DefaultFinancialCategoryMixin, TemplateView):
 class FinancialTransactionCreateView(DefaultFinancialCategoryMixin, CreateView):
     model = FinancialTransaction
     form_class = FinancialTransactionForm
-    template_name = "financeiro_movimentacao_form.html"
+    template_name = "financeiro/html/financeiro_movimentacao_form.html"
     success_url = reverse_lazy("financeiro_caixa")
 
     def dispatch(self, request, *args, **kwargs):
@@ -62,7 +62,7 @@ class FinancialTransactionCreateView(DefaultFinancialCategoryMixin, CreateView):
 class FinancialCategoryCreateView(CreateView):
     model = FinancialCategory
     form_class = FinancialCategoryForm
-    template_name = "financeiro_categoria_form.html"
+    template_name = "financeiro/html/financeiro_categoria_form.html"
     success_url = reverse_lazy("financeiro_categorias")
 
     def get_context_data(self, **kwargs):
@@ -85,11 +85,11 @@ class ProtectedCategoryRedirectMixin:
 class FinancialCategoryUpdateView(ProtectedCategoryRedirectMixin, UpdateView):
     model = FinancialCategory
     form_class = FinancialCategoryForm
-    template_name = "financeiro_categoria_form.html"
+    template_name = "financeiro/html/financeiro_categoria_form.html"
     context_object_name = "category"
 
 
 class FinancialCategoryDeleteView(ProtectedCategoryRedirectMixin, DeleteView):
     model = FinancialCategory
-    template_name = "financeiro_categoria_confirm_delete.html"
+    template_name = "financeiro/html/financeiro_categoria_confirm_delete.html"
     context_object_name = "category"

@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2M Pipas - {% if category %}Alterar Categoria{% else %}Nova Categoria{% endif %}</title>
-    <style>
-        :root {
+﻿:root {
             color-scheme: light;
             --background: #f4f7fb;
             --surface: #ffffff;
@@ -18,7 +11,9 @@
             --shadow: 0 18px 45px rgba(23, 32, 51, 0.10);
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             margin: 0;
@@ -41,9 +36,22 @@
             box-shadow: var(--shadow);
         }
 
-        .brand { margin-bottom: 34px; }
-        .brand strong { display: block; font-size: 24px; line-height: 1.1; }
-        .brand span { display: block; margin-top: 6px; color: var(--muted); font-size: 14px; }
+        .brand {
+            margin-bottom: 34px;
+        }
+
+        .brand strong {
+            display: block;
+            font-size: 24px;
+            line-height: 1.1;
+        }
+
+        .brand span {
+            display: block;
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 14px;
+        }
 
         .menu {
             display: grid;
@@ -58,6 +66,7 @@
             text-decoration: none;
             font-weight: 700;
             border: 1px solid transparent;
+            transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
         }
 
         .menu a:hover,
@@ -69,8 +78,13 @@
             outline: none;
         }
 
-        .content { padding: 44px; }
-        .header { margin-bottom: 24px; }
+        .content {
+            padding: 44px;
+        }
+
+        .header {
+            margin-bottom: 24px;
+        }
 
         .header h1 {
             margin: 0 0 8px;
@@ -94,8 +108,15 @@
             box-shadow: 0 10px 24px rgba(23, 32, 51, 0.06);
         }
 
-        .form-row { margin-bottom: 18px; }
-        label { display: block; margin-bottom: 8px; font-weight: 700; }
+        .form-row {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
 
         .field {
             width: 100%;
@@ -106,6 +127,10 @@
             font: inherit;
             line-height: 1.4;
             background: #ffffff;
+        }
+
+        textarea.field {
+            resize: vertical;
         }
 
         .field:focus {
@@ -166,62 +191,21 @@
         }
 
         @media (max-width: 760px) {
-            .page { grid-template-columns: 1fr; }
+            .page {
+                grid-template-columns: 1fr;
+            }
+
             .sidebar {
                 border-right: 0;
                 border-bottom: 1px solid var(--border);
                 box-shadow: none;
             }
-            .content { padding: 28px 22px; }
-            .header h1 { font-size: 28px; }
+
+            .content {
+                padding: 28px 22px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
         }
-    </style>
-</head>
-<body>
-    <main class="page">
-        <aside class="sidebar" aria-label="Menu principal">
-            <div class="brand">
-                <strong>2M Pipas</strong>
-                <span>Sistema de gestao</span>
-            </div>
-
-            <nav class="menu">
-                <a href="{% url 'produtos' %}">Produtos</a>
-                <a href="{% url 'clientes' %}">Clientes</a>
-                <a href="{% url 'vendas' %}">Vendas</a>
-                <a class="active" href="{% url 'financeiro_caixa' %}">Financeiro</a>
-            </nav>
-        </aside>
-
-        <section class="content">
-            <div class="header">
-                <h1>{% if category %}Alterar categoria{% else %}Nova categoria{% endif %}</h1>
-                <p>{% if category %}{{ category.name }}{% else %}Cadastre uma nova categoria financeira.{% endif %}</p>
-            </div>
-
-            <form class="form-panel" method="post">
-                {% csrf_token %}
-
-                {% for field in form %}
-                    <div class="form-row">
-                        {{ field.label_tag }}
-                        {{ field }}
-                        {% if field.errors %}
-                            <ul class="errors">
-                                {% for error in field.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-
-                <div class="actions">
-                    <button class="button button-primary" type="submit">{% if category %}Salvar alteracoes{% else %}Cadastrar categoria{% endif %}</button>
-                    <a class="button button-secondary" href="{% url 'financeiro_categorias' %}">Cancelar</a>
-                </div>
-            </form>
-        </section>
-    </main>
-</body>
-</html>

@@ -1,0 +1,115 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2M Pipas - Vendas</title>
+    <link rel="stylesheet" href="{% static 'vendas/css/vendas.css' %}">
+</head>
+<body>
+    <main class="page">
+        <aside class="sidebar" aria-label="Menu principal">
+            <div class="brand">
+                <strong>2M Pipas</strong>
+                <span>Sistema de gestao</span>
+            </div>
+
+            <nav class="menu">
+                <a href="{% url 'produtos' %}">Produtos</a>
+                <a href="{% url 'clientes' %}">Clientes</a>
+                <a class="active" href="{% url 'vendas' %}">Vendas</a>
+                <a href="{% url 'financeiro_caixa' %}">Financeiro</a>
+            </nav>
+        </aside>
+
+        <section class="content">
+            <div class="header">
+                <div>
+                    <h1>Vendas</h1>
+                    <p>Consulte vendas por cliente, produto, numero ou forma de pagamento.</p>
+                </div>
+                <a class="button" href="{% url 'venda_nova' %}">Nova venda</a>
+            </div>
+
+            <div class="summary" aria-label="Resumo das vendas exibidas">
+                <div class="summary-item">
+                    <span>Vendas exibidas</span>
+                    <strong>{{ sales|length }}</strong>
+                </div>
+                <div class="summary-item">
+                    <span>Itens vendidos</span>
+                    <strong>{{ total_items }}</strong>
+                </div>
+                <div class="summary-item">
+                    <span>Total vendido</span>
+                    <strong>R$ {{ total_revenue|floatformat:2 }}</strong>
+                </div>
+            </div>
+
+            <form class="filters" method="get">
+                <div class="filter-field">
+                    <label for="q">Buscar</label>
+                    <input class="field" id="q" name="q" type="search" value="{{ query }}" placeholder="Cliente, produto ou numero">
+                </div>
+
+                <div class="filter-field">
+                    <label for="pagamento">Pagamento</label>
+                    <select class="field" id="pagamento" name="pagamento">
+                        <option value="">Todos</option>
+                        {% for value, label in payment_methods %}
+                            <option value="{{ value }}"{% if selected_payment_method == value %} selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button class="button" type="submit">Filtrar</button>
+                <a class="button button-secondary" href="{% url 'vendas' %}">Limpar</a>
+            </form>
+
+            {% if sales %}
+                <div class="table-panel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Venda</th>
+                                <th>Cliente</th>
+                                <th>Produtos</th>
+                                <th>Pagamento</th>
+                                <th>Data</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sale in sales %}
+                                <tr>
+                                    <td data-label="Venda">
+                                        <span class="sale-id">#{{ sale.id }}</span>
+                                    </td>
+                                    <td data-label="Cliente">
+                                        <span class="client-name">{{ sale.client.name }}</span>
+                                    </td>
+                                    <td data-label="Produtos">
+                                        <span>{{ sale.items_summary }}</span>
+                                    </td>
+                                    <td data-label="Pagamento">
+                                        <span class="badge">{{ sale.get_payment_method_display }}</span>
+                                    </td>
+                                    <td data-label="Data">
+                                        <time datetime="{{ sale.created_at|date:'c' }}">{{ sale.created_at|date:"d/m/Y H:i" }}</time>
+                                    </td>
+                                    <td data-label="Total">
+                                        <span class="amount">R$ {{ sale.total_price|floatformat:2 }}</span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty">Nenhuma venda encontrada.</div>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

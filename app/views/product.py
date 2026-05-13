@@ -7,7 +7,7 @@ from app.models import Product
 
 class ProductListView(ListView):
     model = Product
-    template_name = "produtos.html"
+    template_name = "produtos/html/produtos.html"
     context_object_name = "products"
     ordering = ["name"]
 
@@ -15,7 +15,7 @@ class ProductListView(ListView):
 class ProductCreateView(CreateView):
     model = Product
     form_class = ProductForm
-    template_name = "produto_form.html"
+    template_name = "produtos/html/produto_form.html"
     success_url = reverse_lazy("produtos")
 
     def get_context_data(self, **kwargs):
@@ -27,7 +27,7 @@ class ProductCreateView(CreateView):
 class ProductUpdateView(UpdateView):
     model = Product
     form_class = ProductForm
-    template_name = "produto_form.html"
+    template_name = "produtos/html/produto_form.html"
     context_object_name = "product"
     pk_url_kwarg = "product_id"
     success_url = reverse_lazy("produtos")
@@ -35,7 +35,7 @@ class ProductUpdateView(UpdateView):
 
 class ProductDeleteView(DeleteView):
     model = Product
-    template_name = "produto_confirm_delete.html"
+    template_name = "produtos/html/produto_confirm_delete.html"
     context_object_name = "product"
     pk_url_kwarg = "product_id"
     success_url = reverse_lazy("produtos")

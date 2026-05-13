@@ -9,7 +9,7 @@ from app.models import Client, SaleItem
 
 class ClientListView(ListView):
     model = Client
-    template_name = "clientes.html"
+    template_name = "clientes/html/clientes.html"
     context_object_name = "clients"
 
     def get_queryset(self):
@@ -42,7 +42,7 @@ class ClientListView(ListView):
 class ClientCreateView(CreateView):
     model = Client
     form_class = ClientForm
-    template_name = "cliente_form.html"
+    template_name = "clientes/html/cliente_form.html"
     success_url = reverse_lazy("clientes")
 
     def get_context_data(self, **kwargs):
@@ -54,7 +54,7 @@ class ClientCreateView(CreateView):
 class ClientUpdateView(UpdateView):
     model = Client
     form_class = ClientForm
-    template_name = "cliente_form.html"
+    template_name = "clientes/html/cliente_form.html"
     context_object_name = "client"
     pk_url_kwarg = "client_id"
     success_url = reverse_lazy("clientes")
@@ -62,7 +62,7 @@ class ClientUpdateView(UpdateView):
 
 class ClientDeleteView(DeleteView):
     model = Client
-    template_name = "cliente_confirm_delete.html"
+    template_name = "clientes/html/cliente_confirm_delete.html"
     context_object_name = "client"
     pk_url_kwarg = "client_id"
     success_url = reverse_lazy("clientes")

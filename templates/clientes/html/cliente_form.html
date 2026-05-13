@@ -1,0 +1,57 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2M Pipas - {% if client %}Alterar Cliente{% else %}Novo Cliente{% endif %}</title>
+    <link rel="stylesheet" href="{% static 'clientes/css/cliente_form.css' %}">
+</head>
+<body>
+    <main class="page">
+        <aside class="sidebar" aria-label="Menu principal">
+            <div class="brand">
+                <strong>2M Pipas</strong>
+                <span>Sistema de gestao</span>
+            </div>
+
+            <nav class="menu">
+                <a href="{% url 'produtos' %}">Produtos</a>
+                <a class="active" href="{% url 'clientes' %}">Clientes</a>
+                <a href="{% url 'vendas' %}">Vendas</a>
+                <a href="{% url 'financeiro_caixa' %}">Financeiro</a>
+            </nav>
+        </aside>
+
+        <section class="content">
+            <div class="header">
+                <h1>{% if client %}Alterar cliente{% else %}Novo cliente{% endif %}</h1>
+                <p>{% if client %}{{ client.name }}{% else %}Cadastre nome e idade do cliente.{% endif %}</p>
+            </div>
+
+            <form class="form-panel" method="post">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="form-row">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                            <ul class="errors">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="actions">
+                    <button class="button button-primary" type="submit">{% if client %}Salvar alteracoes{% else %}Cadastrar cliente{% endif %}</button>
+                    <a class="button button-secondary" href="{% url 'clientes' %}">Cancelar</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

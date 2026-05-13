@@ -9,7 +9,7 @@ from app.models import Client, FinancialCategory, FinancialTransaction, Product,
 
 class SaleListView(ListView):
     model = Sale
-    template_name = "vendas.html"
+    template_name = "vendas/html/vendas.html"
     context_object_name = "sales"
 
     def get_queryset(self):
@@ -48,7 +48,7 @@ class SaleListView(ListView):
 
 class SaleCreateView(FormView):
     form_class = SaleForm
-    template_name = "venda_form.html"
+    template_name = "vendas/html/venda_form.html"
 
     def form_valid(self, form):
         with transaction.atomic():

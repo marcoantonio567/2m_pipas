@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2M Pipas - Menu</title>
-    <style>
-        :root {
+﻿:root {
             color-scheme: light;
             --background: #f4f7fb;
             --surface: #ffffff;
@@ -14,6 +7,8 @@
             --text: #172033;
             --muted: #667085;
             --border: #d8e1ec;
+            --danger: #b42318;
+            --danger-dark: #8f1c13;
             --shadow: 0 18px 45px rgba(23, 32, 51, 0.10);
         }
 
@@ -76,7 +71,8 @@
         }
 
         .menu a:hover,
-        .menu a:focus {
+        .menu a:focus,
+        .menu a.active {
             color: var(--primary-dark);
             background: #e7f6f4;
             border-color: #b8e1dc;
@@ -85,26 +81,82 @@
 
         .content {
             padding: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        .welcome {
-            width: min(720px, 100%);
+        .confirm-panel {
+            width: min(620px, 100%);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.06);
         }
 
-        .welcome h1 {
-            margin: 0 0 12px;
-            font-size: 36px;
+        h1 {
+            margin: 0 0 10px;
+            font-size: 34px;
             line-height: 1.15;
         }
 
-        .welcome p {
+        p {
             margin: 0;
             color: var(--muted);
-            font-size: 18px;
+            font-size: 16px;
             line-height: 1.5;
+        }
+
+        .client-name {
+            margin-top: 18px;
+            padding: 14px 16px;
+            border-radius: 8px;
+            background: #fff6f5;
+            color: var(--danger);
+            font-weight: 700;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 0 18px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            font: inherit;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button-danger {
+            background: var(--danger);
+            color: #ffffff;
+        }
+
+        .button-danger:hover,
+        .button-danger:focus {
+            background: var(--danger-dark);
+            outline: none;
+        }
+
+        .button-secondary {
+            background: #ffffff;
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .button-secondary:hover,
+        .button-secondary:focus {
+            color: var(--primary-dark);
+            border-color: #b8e1dc;
+            outline: none;
         }
 
         @media (max-width: 760px) {
@@ -120,37 +172,9 @@
 
             .content {
                 padding: 28px 22px;
-                justify-content: flex-start;
             }
 
-            .welcome h1 {
+            h1 {
                 font-size: 28px;
             }
         }
-    </style>
-</head>
-<body>
-    <main class="page">
-        <aside class="sidebar" aria-label="Menu principal">
-            <div class="brand">
-                <strong>2M Pipas</strong>
-                <span>Sistema de gestao</span>
-            </div>
-
-            <nav class="menu">
-                <a href="{% url 'produtos' %}">Produtos</a>
-                <a href="{% url 'clientes' %}">Clientes</a>
-                <a href="{% url 'vendas' %}">Vendas</a>
-                <a href="{% url 'financeiro_caixa' %}">Financeiro</a>
-            </nav>
-        </aside>
-
-        <section class="content">
-            <div class="welcome">
-                <h1>Bem-vindo ao sistema</h1>
-                <p>Escolha uma opcao no menu para acessar as areas de produtos, clientes, vendas e financeiro.</p>
-            </div>
-        </section>
-    </main>
-</body>
-</html>

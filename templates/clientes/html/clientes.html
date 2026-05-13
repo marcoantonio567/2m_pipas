@@ -1,0 +1,73 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2M Pipas - Clientes</title>
+    <link rel="stylesheet" href="{% static 'clientes/css/clientes.css' %}">
+</head>
+<body>
+    <main class="page">
+        <aside class="sidebar" aria-label="Menu principal">
+            <div class="brand">
+                <strong>2M Pipas</strong>
+                <span>Sistema de gestao</span>
+            </div>
+
+            <nav class="menu">
+                <a href="{% url 'produtos' %}">Produtos</a>
+                <a class="active" href="{% url 'clientes' %}">Clientes</a>
+                <a href="{% url 'vendas' %}">Vendas</a>
+                <a href="{% url 'financeiro_caixa' %}">Financeiro</a>
+            </nav>
+        </aside>
+
+        <section class="content">
+            <div class="header">
+                <div>
+                    <h1>Clientes</h1>
+                    <p>Resumo de compras por cliente.</p>
+                </div>
+                <a class="action-link" href="{% url 'cliente_novo' %}">Novo cliente</a>
+            </div>
+
+            {% if clients %}
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Idade</th>
+                                <th>Quantidade comprada</th>
+                                <th>Item mais comprado</th>
+                                <th>Total comprado</th>
+                                <th>Acoes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for client in clients %}
+                                <tr>
+                                    <td class="client-name">{{ client.name }}</td>
+                                    <td>{{ client.age }}</td>
+                                    <td>{{ client.total_quantity }}</td>
+                                    <td>{{ client.most_purchased_item }}</td>
+                                    <td class="money">R$ {{ client.total_spent|floatformat:2 }}</td>
+                                    <td>
+                                        <div class="row-actions">
+                                            <a class="action-link" href="{% url 'cliente_alterar' client.id %}">Alterar</a>
+                                            <a class="action-link delete-link" href="{% url 'cliente_excluir' client.id %}">Excluir</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty">Nenhum cliente cadastrado.</div>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

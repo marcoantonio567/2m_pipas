@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2M Pipas - Nova Venda</title>
-    <style>
-        :root {
+﻿:root {
             color-scheme: light;
             --background: #f4f7fb;
             --surface: #ffffff;
@@ -45,10 +38,7 @@
         .brand strong { display: block; font-size: 24px; line-height: 1.1; }
         .brand span { display: block; margin-top: 6px; color: var(--muted); font-size: 14px; }
 
-        .menu {
-            display: grid;
-            gap: 10px;
-        }
+        .menu { display: grid; gap: 10px; }
 
         .menu a {
             display: block;
@@ -70,10 +60,20 @@
         }
 
         .content { padding: 44px; }
-
         .header { margin-bottom: 24px; }
-        .header h1 { margin: 0 0 8px; font-size: 34px; line-height: 1.15; }
-        .header p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.5; }
+
+        .header h1 {
+            margin: 0 0 8px;
+            font-size: 34px;
+            line-height: 1.15;
+        }
+
+        .header p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.5;
+        }
 
         .form-panel {
             width: min(680px, 100%);
@@ -85,12 +85,7 @@
         }
 
         .form-row { margin-bottom: 18px; }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
+        label { display: block; margin-bottom: 8px; font-weight: 700; }
 
         .field {
             width: 100%;
@@ -106,13 +101,6 @@
         .field:focus {
             border-color: var(--primary);
             outline: 3px solid #c7ebe7;
-        }
-
-        .help {
-            margin: 8px 0 0;
-            color: var(--muted);
-            font-size: 14px;
-            line-height: 1.4;
         }
 
         .errors {
@@ -143,70 +131,37 @@
             cursor: pointer;
         }
 
-        .button-primary { background: var(--primary); color: #ffffff; }
-        .button-primary:hover,
-        .button-primary:focus { background: var(--primary-dark); outline: none; }
+        .button-primary {
+            background: var(--primary);
+            color: #ffffff;
+        }
 
-        .button-secondary { background: #ffffff; color: var(--text); border-color: var(--border); }
+        .button-primary:hover,
+        .button-primary:focus {
+            background: var(--primary-dark);
+            outline: none;
+        }
+
+        .button-secondary {
+            background: #ffffff;
+            color: var(--text);
+            border-color: var(--border);
+        }
+
         .button-secondary:hover,
-        .button-secondary:focus { color: var(--primary-dark); border-color: #b8e1dc; outline: none; }
+        .button-secondary:focus {
+            color: var(--primary-dark);
+            border-color: #b8e1dc;
+            outline: none;
+        }
 
         @media (max-width: 760px) {
             .page { grid-template-columns: 1fr; }
-            .sidebar { border-right: 0; border-bottom: 1px solid var(--border); box-shadow: none; }
+            .sidebar {
+                border-right: 0;
+                border-bottom: 1px solid var(--border);
+                box-shadow: none;
+            }
             .content { padding: 28px 22px; }
             .header h1 { font-size: 28px; }
         }
-    </style>
-</head>
-<body>
-    <main class="page">
-        <aside class="sidebar" aria-label="Menu principal">
-            <div class="brand">
-                <strong>2M Pipas</strong>
-                <span>Sistema de gestao</span>
-            </div>
-
-            <nav class="menu">
-                <a href="{% url 'produtos' %}">Produtos</a>
-                <a href="{% url 'clientes' %}">Clientes</a>
-                <a class="active" href="{% url 'vendas' %}">Vendas</a>
-                <a href="{% url 'financeiro_caixa' %}">Financeiro</a>
-            </nav>
-        </aside>
-
-        <section class="content">
-            <div class="header">
-                <h1>Nova venda</h1>
-                <p>Escolha o produto, associe a um cliente e informe a forma de pagamento.</p>
-            </div>
-
-            <form class="form-panel" method="post">
-                {% csrf_token %}
-
-                {% for field in form %}
-                    <div class="form-row">
-                        {{ field.label_tag }}
-                        {{ field }}
-                        {% if field.name == "client_name" %}
-                            <p class="help">Se o cliente ainda nao existir, deixe o seletor acima em branco e digite o nome aqui.</p>
-                        {% endif %}
-                        {% if field.errors %}
-                            <ul class="errors">
-                                {% for error in field.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-
-                <div class="actions">
-                    <button class="button button-primary" type="submit">Cadastrar venda</button>
-                    <a class="button button-secondary" href="{% url 'vendas' %}">Cancelar</a>
-                </div>
-            </form>
-        </section>
-    </main>
-</body>
-</html>
