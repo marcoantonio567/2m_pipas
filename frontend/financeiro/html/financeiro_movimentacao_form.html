@@ -26,12 +26,21 @@
 
         <section class="content">
             <div class="header">
+                <span class="eyebrow">Financeiro</span>
                 <h1>Nova movimentacao</h1>
-                <p>Cadastre uma entrada ou saida do caixa.</p>
+                <p>Cadastre uma entrada ou saida para manter o caixa atualizado.</p>
             </div>
 
             <form class="form-panel" method="post">
                 {% csrf_token %}
+
+                <div class="form-intro">
+                    <span class="form-icon">F</span>
+                    <div>
+                        <strong>Dados da movimentacao</strong>
+                        <span>Escolha o tipo, categoria, valor e data do lancamento.</span>
+                    </div>
+                </div>
 
                 {% for field in form %}
                     <div class="form-row">

@@ -22,6 +22,15 @@ class FinancialCategoryListView(DefaultFinancialCategoryMixin, ListView):
     template_name = "financeiro/html/financeiro_categorias.html"
     context_object_name = "categories"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categories = context["categories"]
+
+        context["total_categories"] = len(categories)
+        context["custom_categories"] = sum(1 for category in categories if not category.is_protected)
+        context["protected_categories"] = sum(1 for category in categories if category.is_protected)
+        return context
+
     def get_queryset(self):
         self.ensure_default_category()
         return FinancialCategory.objects.all()
@@ -51,6 +60,7 @@ class CashRegisterView(DefaultFinancialCategoryMixin, TemplateView):
         totals["balance"] = totals["income"] - totals["expense"]
         context["transactions"] = transactions
         context["totals"] = totals
+        context["total_transactions"] = transactions.count()
         return context
 
 

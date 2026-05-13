@@ -27,13 +27,29 @@
         <section class="content">
             <div class="header">
                 <div>
-                    <h1>Financeiro</h1>
-                    <p>Categorias cadastradas para organizar o financeiro.</p>
+                    <span class="eyebrow">Financeiro</span>
+                    <h1>Categorias</h1>
+                    <p>Organize entradas e saidas por origem, destino ou tipo de gasto.</p>
                 </div>
                 <div class="category-actions">
-                    <a class="action-link" href="{% url 'financeiro_caixa' %}">Caixa</a>
-                    <a class="action-link" href="{% url 'financeiro_categoria_nova' %}">Nova categoria</a>
+                    <a class="action-link secondary-action" href="{% url 'financeiro_caixa' %}">Caixa</a>
+                    <a class="action-link primary-action" href="{% url 'financeiro_categoria_nova' %}">Nova categoria</a>
                 </div>
+            </div>
+
+            <div class="summary" aria-label="Resumo de categorias financeiras">
+                <article class="summary-card total-card">
+                    <span>Categorias</span>
+                    <strong>{{ total_categories }}</strong>
+                </article>
+                <article class="summary-card custom-card">
+                    <span>Personalizadas</span>
+                    <strong>{{ custom_categories }}</strong>
+                </article>
+                <article class="summary-card protected-card">
+                    <span>Padrao</span>
+                    <strong>{{ protected_categories }}</strong>
+                </article>
             </div>
 
             {% if categories %}
@@ -64,7 +80,10 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="empty">Nenhuma categoria cadastrada.</div>
+                <div class="empty">
+                    <strong>Nenhuma categoria cadastrada.</strong>
+                    <span>Crie categorias para classificar melhor as movimentacoes.</span>
+                </div>
             {% endif %}
         </section>
     </main>

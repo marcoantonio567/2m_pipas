@@ -27,8 +27,9 @@
         <section class="content">
             <div class="header">
                 <div>
+                    <span class="eyebrow">Financeiro</span>
                     <h1>Caixa</h1>
-                    <p>Entradas e saidas cadastradas com categoria obrigatoria.</p>
+                    <p>Controle entradas, saidas, saldo e movimentacoes por categoria.</p>
                 </div>
                 <div class="actions">
                     <a class="button button-secondary" href="{% url 'financeiro_categorias' %}">Categorias</a>
@@ -36,18 +37,22 @@
                 </div>
             </div>
 
-            <div class="summary">
-                <div class="summary-card">
+            <div class="summary" aria-label="Resumo do caixa">
+                <div class="summary-card income-card">
                     <span>Entradas</span>
                     <strong class="income">R$ {{ totals.income|floatformat:2 }}</strong>
                 </div>
-                <div class="summary-card">
+                <div class="summary-card expense-card">
                     <span>Saidas</span>
                     <strong class="expense">R$ {{ totals.expense|floatformat:2 }}</strong>
                 </div>
-                <div class="summary-card">
+                <div class="summary-card balance-card">
                     <span>Saldo</span>
                     <strong>R$ {{ totals.balance|floatformat:2 }}</strong>
+                </div>
+                <div class="summary-card movement-card">
+                    <span>Movimentacoes</span>
+                    <strong>{{ total_transactions }}</strong>
                 </div>
             </div>
 
@@ -66,17 +71,17 @@
                         <tbody>
                             {% for transaction in transactions %}
                                 <tr>
-                                    <td>{{ transaction.date|date:"d/m/Y" }}</td>
-                                    <td>
+                                    <td data-label="Data">{{ transaction.date|date:"d/m/Y" }}</td>
+                                    <td data-label="Tipo">
                                         {% if transaction.type == "entrada" %}
                                             <span class="type-label">Entrada</span>
                                         {% else %}
                                             <span class="type-label expense-label">Saida</span>
                                         {% endif %}
                                     </td>
-                                    <td>{{ transaction.category.name }}</td>
-                                    <td>{{ transaction.description|default:"-" }}</td>
-                                    <td class="amount {% if transaction.type == "entrada" %}income{% else %}expense{% endif %}">
+                                    <td data-label="Categoria"><span class="category-pill">{{ transaction.category.name }}</span></td>
+                                    <td data-label="Descricao">{{ transaction.description|default:"-" }}</td>
+                                    <td data-label="Valor" class="amount {% if transaction.type == "entrada" %}income{% else %}expense{% endif %}">
                                         R$ {{ transaction.amount|floatformat:2 }}
                                     </td>
                                 </tr>
@@ -85,7 +90,10 @@
                     </table>
                 </div>
             {% else %}
-                <div class="empty">Nenhuma movimentacao cadastrada.</div>
+                <div class="empty">
+                    <strong>Nenhuma movimentacao cadastrada.</strong>
+                    <span>Registre uma entrada ou saida para acompanhar o saldo do caixa.</span>
+                </div>
             {% endif %}
         </section>
     </main>

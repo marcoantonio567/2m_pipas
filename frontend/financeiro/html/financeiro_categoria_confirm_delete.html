@@ -27,9 +27,13 @@
         <section class="content">
             <form class="confirm-panel" method="post">
                 {% csrf_token %}
+                <span class="warning-icon">!</span>
                 <h1>Excluir categoria</h1>
                 <p>Confirme para remover esta categoria financeira.</p>
-                <div class="category-name">{{ category.name }}</div>
+                <div class="category-name">
+                    <span>Categoria selecionada</span>
+                    <strong>{{ category.name }}</strong>
+                </div>
 
                 <div class="actions">
                     <button class="button button-danger" type="submit">Excluir categoria</button>

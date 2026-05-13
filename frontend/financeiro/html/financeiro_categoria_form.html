@@ -26,12 +26,21 @@
 
         <section class="content">
             <div class="header">
+                <span class="eyebrow">Financeiro</span>
                 <h1>{% if category %}Alterar categoria{% else %}Nova categoria{% endif %}</h1>
-                <p>{% if category %}{{ category.name }}{% else %}Cadastre uma nova categoria financeira.{% endif %}</p>
+                <p>{% if category %}Atualize a categoria {{ category.name }}.{% else %}Cadastre uma categoria para organizar melhor o caixa.{% endif %}</p>
             </div>
 
             <form class="form-panel" method="post">
                 {% csrf_token %}
+
+                <div class="form-intro">
+                    <span class="form-icon">F</span>
+                    <div>
+                        <strong>Informacoes da categoria</strong>
+                        <span>Use nomes claros para encontrar entradas e saidas rapidamente.</span>
+                    </div>
+                </div>
 
                 {% for field in form %}
                     <div class="form-row">
