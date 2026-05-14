@@ -1,5 +1,6 @@
 from django.db.models import DecimalField, Q, Sum
 from django.db.models.functions import Coalesce
+from django.core.paginator import Paginator
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, TemplateView, UpdateView
@@ -40,11 +41,14 @@ class CashRegisterView(DefaultFinancialCategoryMixin, TemplateView):
     """Exibe o caixa com movimentacoes, entradas, saidas e saldo atual."""
 
     template_name = "financeiro/html/financeiro_caixa.html"
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         self.ensure_default_category()
         context = super().get_context_data(**kwargs)
         transactions = FinancialTransaction.objects.select_related("category")
+        paginator = Paginator(transactions, self.paginate_by)
+        page_obj = paginator.get_page(self.request.GET.get("page"))
         totals = transactions.aggregate(
             income=Coalesce(
                 Sum("amount", filter=Q(type=FinancialTransaction.INCOME)),
@@ -58,7 +62,10 @@ class CashRegisterView(DefaultFinancialCategoryMixin, TemplateView):
             ),
         )
         totals["balance"] = totals["income"] - totals["expense"]
-        context["transactions"] = transactions
+        context["transactions"] = page_obj.object_list
+        context["paginator"] = paginator
+        context["page_obj"] = page_obj
+        context["is_paginated"] = page_obj.has_other_pages()
         context["totals"] = totals
         context["total_transactions"] = transactions.count()
         return context

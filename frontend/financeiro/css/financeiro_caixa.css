@@ -366,6 +366,66 @@ tr:last-child td {
     font-size: 18px;
 }
 
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 16px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: 0 10px 24px rgba(23, 32, 51, 0.06);
+}
+
+.pagination span {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.pagination-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.pagination-links a,
+.pagination-links strong {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    min-height: 38px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.pagination-links a {
+    color: var(--text);
+    background: #ffffff;
+}
+
+.pagination-links a:hover,
+.pagination-links a:focus {
+    color: var(--primary-dark);
+    border-color: #b8e1dc;
+    background: var(--soft);
+    outline: none;
+}
+
+.pagination-links strong {
+    color: #ffffff;
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
 @media (max-width: 1040px) {
     .summary {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -488,6 +548,15 @@ tr:last-child td {
         max-width: 100%;
         white-space: normal;
         text-align: right;
+    }
+
+    .pagination {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .pagination-links {
+        justify-content: flex-start;
     }
 }
 

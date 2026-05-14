@@ -13,10 +13,11 @@ class ClientListView(ListView):
     model = Client
     template_name = "clientes/html/clientes.html"
     context_object_name = "clients"
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        clients = context["clients"]
+        clients = list(self.object_list)
 
         context["total_clients"] = len(clients)
         context["clients_with_sales"] = sum(1 for client in clients if client.total_quantity)

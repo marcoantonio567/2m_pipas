@@ -99,6 +99,28 @@
                         </tbody>
                     </table>
                 </div>
+                {% if is_paginated %}
+                    <nav class="pagination" aria-label="Paginacao de vendas">
+                        <span>Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+                        <div class="pagination-links">
+                            {% if page_obj.has_previous %}
+                                <a href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_obj.previous_page_number }}">Anterior</a>
+                            {% endif %}
+
+                            {% for page_number in page_obj.paginator.page_range %}
+                                {% if page_number == page_obj.number %}
+                                    <strong>{{ page_number }}</strong>
+                                {% else %}
+                                    <a href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_number }}">{{ page_number }}</a>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <a href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_obj.next_page_number }}">Proxima</a>
+                            {% endif %}
+                        </div>
+                    </nav>
+                {% endif %}
             {% else %}
                 <div class="empty">Nenhuma venda encontrada.</div>
             {% endif %}

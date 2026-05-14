@@ -14,6 +14,7 @@ class SaleListView(ListView):
     model = Sale
     template_name = "vendas/html/vendas.html"
     context_object_name = "sales"
+    paginate_by = 10
 
     def get_queryset(self):
         query = self.request.GET.get("q", "").strip()
@@ -38,6 +39,7 @@ class SaleListView(ListView):
         context["payment_methods"] = Sale.PAYMENT_METHOD_CHOICES
         context["selected_payment_method"] = self.request.GET.get("pagamento", "").strip()
         context["query"] = self.request.GET.get("q", "").strip()
+        context["pagination_query"] = self.get_pagination_query()
         context["total_revenue"] = sum(sale.total_price for sale in sale_list)
         context["total_items"] = sum(item.quantity for sale in sale_list for item in sale.items.all())
 
@@ -47,6 +49,11 @@ class SaleListView(ListView):
             )
 
         return context
+
+    def get_pagination_query(self):
+        query_params = self.request.GET.copy()
+        query_params.pop("page", None)
+        return query_params.urlencode()
 
 
 class SaleCreateView(FormView):
