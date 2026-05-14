@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,53 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2M Pipas - Menu</title>
     <link rel="stylesheet" href="{% static 'menu/css/menu.css' %}">
+    <link rel="stylesheet" href="{% static 'shared/css/sidebar.css' %}">
 </head>
 <body>
     <main class="page">
-        <aside class="sidebar" aria-label="Menu principal">
-            <div class="brand">
-                <strong>2M Pipas</strong>
-                <span>Sistema de gestao</span>
-            </div>
-
-            <nav class="menu">
-                <a href="{% url 'vendas' %}">
-                    <span class="menu-icon">V</span>
-                    <span>
-                        <strong>Vendas</strong>
-                        <small>Registrar e consultar</small>
-                    </span>
-                </a>
-                <a href="{% url 'produtos' %}">
-                    <span class="menu-icon">P</span>
-                    <span>
-                        <strong>Produtos</strong>
-                        <small>Estoque e precos</small>
-                    </span>
-                </a>
-                <a href="{% url 'clientes' %}">
-                    <span class="menu-icon">C</span>
-                    <span>
-                        <strong>Clientes</strong>
-                        <small>Cadastro e historico</small>
-                    </span>
-                </a>
-                <a href="{% url 'financeiro_caixa' %}">
-                    <span class="menu-icon">F</span>
-                    <span>
-                        <strong>Financeiro</strong>
-                        <small>Caixa e categorias</small>
-                    </span>
-                </a>
-                <a href="{% url 'dashboards' %}">
-                    <span class="menu-icon">D</span>
-                    <span>
-                        <strong>Dashboards</strong>
-                        <small>Graficos e indicadores</small>
-                    </span>
-                </a>
-            </nav>
-        </aside>
+        {% include 'shared/html/sidebar.html' %}
 
         <section class="content">
             <div class="welcome">

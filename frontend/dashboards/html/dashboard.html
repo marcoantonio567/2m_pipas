@@ -6,23 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2M Pipas - Dashboards</title>
     <link rel="stylesheet" href="{% static 'dashboards/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'shared/css/sidebar.css' %}">
 </head>
 <body>
     <main class="page">
-        <aside class="sidebar" aria-label="Menu principal">
-            <div class="brand">
-                <strong>2M Pipas</strong>
-                <span>Sistema de gestao</span>
-            </div>
-
-            <nav class="menu">
-                <a class="active" href="{% url 'dashboards' %}"><span>D</span><strong>Dashboards</strong></a>
-                <a href="{% url 'produtos' %}"><span>P</span><strong>Produtos</strong></a>
-                <a href="{% url 'clientes' %}"><span>C</span><strong>Clientes</strong></a>
-                <a href="{% url 'vendas' %}"><span>V</span><strong>Vendas</strong></a>
-                <a href="{% url 'financeiro_caixa' %}"><span>F</span><strong>Financeiro</strong></a>
-            </nav>
-        </aside>
+        {% include 'shared/html/sidebar.html' %}
 
         <section class="content">
             <div class="header">

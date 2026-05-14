@@ -1,0 +1,83 @@
+<div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
+
+<button class="sidebar-toggle" id="sidebarToggle" type="button" aria-controls="appSidebar" aria-expanded="false" title="Abrir menu">
+    <i class="fas fa-bars" aria-hidden="true"></i>
+    <span class="sr-only">Abrir menu</span>
+</button>
+
+<aside class="sidebar" id="appSidebar" aria-label="Menu principal">
+    <div class="logo">
+        <a class="logo-link" href="{% url 'menu' %}" aria-label="Ir para o menu principal">
+            <span class="logo-icon">
+                <i class="fas fa-chart-line" aria-hidden="true"></i>
+            </span>
+            <span class="logo-text">2M Pipas</span>
+        </a>
+    </div>
+
+    {% with route=request.resolver_match.url_name %}
+        <nav class="nav-menu">
+            <a class="sidebar-link{% if route == 'produtos' or route == 'produto_novo' or route == 'produto_alterar' or route == 'produto_excluir' %} active{% endif %}" href="{% url 'produtos' %}">
+                <i class="fas fa-box" aria-hidden="true"></i>
+                <span>Produtos</span>
+            </a>
+            <a class="sidebar-link{% if route == 'clientes' or route == 'cliente_novo' or route == 'cliente_alterar' or route == 'cliente_excluir' %} active{% endif %}" href="{% url 'clientes' %}">
+                <i class="fas fa-users" aria-hidden="true"></i>
+                <span>Clientes</span>
+            </a>
+            <a class="sidebar-link{% if route == 'vendas' or route == 'venda_nova' %} active{% endif %}" href="{% url 'vendas' %}">
+                <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                <span>Vendas</span>
+            </a>
+            <a class="sidebar-link{% if route == 'financeiro_caixa' or route == 'financeiro_movimentacao_nova' or route == 'financeiro_categorias' or route == 'financeiro_categoria_nova' or route == 'financeiro_categoria_alterar' or route == 'financeiro_categoria_excluir' %} active{% endif %}" href="{% url 'financeiro_caixa' %}">
+                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                <span>Financeiro</span>
+            </a>
+            <a class="sidebar-link{% if route == 'dashboards' %} active{% endif %}" href="{% url 'dashboards' %}">
+                <i class="fas fa-tachometer-alt" aria-hidden="true"></i>
+                <span>Dashboards</span>
+                
+            </a>
+        </nav>
+    {% endwith %}
+
+    <div class="sidebar-version">
+        <i class="fas fa-code-branch" aria-hidden="true"></i>
+        <span>Versao 2.0.0</span>
+    </div>
+</aside>
+
+<script>
+    (function () {
+        const page = document.querySelector('.page');
+        const sidebar = document.getElementById('appSidebar');
+        const toggle = document.getElementById('sidebarToggle');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        if (!page || !sidebar || !toggle || !overlay) return;
+
+        function closeMobileMenu() {
+            sidebar.classList.remove('mobile-open');
+            overlay.classList.remove('active');
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+
+        toggle.addEventListener('click', function () {
+            if (window.innerWidth > 768) {
+                return;
+            }
+
+            const isOpen = sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active', isOpen);
+            toggle.setAttribute('aria-expanded', String(isOpen));
+        });
+
+        overlay.addEventListener('click', closeMobileMenu);
+
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 768) {
+                closeMobileMenu();
+            }
+        });
+    })();
+</script>
