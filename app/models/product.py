@@ -15,9 +15,9 @@ class Product(models.Model):
 
     @property
     def profit_percentage(self):
-        if self.cost_price == 0:
+        if self.price == 0:
             return 0
-        return (self.profit_value / self.cost_price) * 100
+        return (self.profit_value / self.price) * 100
 
     def __str__(self):
         return self.name

@@ -1,7 +1,23 @@
+from decimal import Decimal
+
 from django.test import TestCase
 from django.urls import reverse
 
 from .models import Client, FinancialCategory, FinancialTransaction, Product, Sale, SaleItem
+
+
+class ProductTests(TestCase):
+    def test_profit_percentage_is_margin_over_sale_price(self):
+        product = Product.objects.create(
+            name="Pipa",
+            description="Pipa pronta",
+            quantity=1,
+            cost_price=Decimal("1.00"),
+            price=Decimal("7.00"),
+        )
+
+        self.assertEqual(product.profit_value, Decimal("6.00"))
+        self.assertAlmostEqual(product.profit_percentage, Decimal("85.71428571428571428571428571"))
 
 
 class ClientTests(TestCase):
