@@ -1,7 +1,7 @@
 import unicodedata
 
-from django.db.models import DecimalField, ExpressionWrapper, F, Sum
-from django.db.models.functions import Coalesce
+from django.db.models import DecimalField, ExpressionWrapper, F, IntegerField, Sum, Value
+from django.db.models.functions import Cast, Coalesce, NullIf
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
@@ -21,12 +21,27 @@ class ClientListView(ListView):
     template_name = "clientes/html/clientes.html"
     context_object_name = "clients"
     paginate_by = 10
+    sort_options = {
+        "age_asc": ("age_order", "name"),
+        "age_desc": ("-age_order", "name"),
+        "items_asc": ("total_quantity", "name"),
+        "items_desc": ("-total_quantity", "name"),
+        "spent_asc": ("total_spent", "name"),
+        "spent_desc": ("-total_spent", "name"),
+    }
+    sort_fields = {
+        "age": "idade",
+        "items": "itens comprados",
+        "spent": "total comprado",
+    }
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         clients = list(self.object_list)
 
         context["query"] = self.request.GET.get("q", "").strip()
+        context["sort"] = self.get_sort()
+        context["sort_links"] = self.get_sort_links()
         context["pagination_query"] = self.get_pagination_query()
         context["total_clients"] = len(clients)
         context["clients_with_sales"] = sum(1 for client in clients if client.total_quantity)
@@ -38,6 +53,42 @@ class ClientListView(ListView):
     def get_pagination_query(self):
         query_params = self.request.GET.copy()
         query_params.pop("page", None)
+        return query_params.urlencode()
+
+    def get_sort(self):
+        sort = self.request.GET.get("sort", "")
+        return sort if sort in self.sort_options else ""
+
+    def get_sort_links(self):
+        current_sort = self.get_sort()
+        return {
+            field: self.get_sort_link(field, label, current_sort)
+            for field, label in self.sort_fields.items()
+        }
+
+    def get_sort_link(self, field, label, current_sort):
+        desc_sort = f"{field}_desc"
+        asc_sort = f"{field}_asc"
+        is_desc = current_sort == desc_sort
+        is_asc = current_sort == asc_sort
+        next_sort = asc_sort if is_desc else desc_sort
+        direction = "desc" if is_desc else "asc" if is_asc else ""
+        next_direction = "menor" if is_desc else "maior"
+        return {
+            "url": self.get_querystring(sort=next_sort),
+            "direction": direction,
+            "active": is_desc or is_asc,
+            "label": f"Ordenar por {next_direction} {label}",
+        }
+
+    def get_querystring(self, **updates):
+        query_params = self.request.GET.copy()
+        query_params.pop("page", None)
+        for key, value in updates.items():
+            if value:
+                query_params[key] = value
+            else:
+                query_params.pop(key, None)
         return query_params.urlencode()
 
     def get_pagination_pages(self, context):
@@ -58,13 +109,18 @@ class ClientListView(ListView):
             output_field=DecimalField(max_digits=12, decimal_places=2),
         )
         clients = Client.objects.annotate(
+            age_order=Coalesce(
+                Cast(NullIf("age", Value("")), IntegerField()),
+                Value(0),
+                output_field=IntegerField(),
+            ),
             total_quantity=Coalesce(Sum("sales__items__quantity"), 0),
             total_spent=Coalesce(
                 Sum(total_spent),
                 0,
                 output_field=DecimalField(max_digits=12, decimal_places=2),
             ),
-        ).order_by("name")
+        )
 
         query = self.request.GET.get("q", "").strip()
         if query:
@@ -75,6 +131,8 @@ class ClientListView(ListView):
                 if normalized_query in normalize_search_text(name)
             ]
             clients = clients.filter(id__in=matching_client_ids)
+
+        clients = clients.order_by(*self.sort_options.get(self.get_sort(), ("name",)))
 
         for client in clients:
             most_purchased = (

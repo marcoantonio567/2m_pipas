@@ -46,6 +46,9 @@
                     <label for="q">Buscar cliente</label>
                     <input class="field" id="q" name="q" type="search" value="{{ query }}" placeholder="Nome do cliente">
                 </div>
+                {% if sort %}
+                    <input type="hidden" name="sort" value="{{ sort }}">
+                {% endif %}
 
                 <button class="action-link primary-action" type="submit">Pesquisar</button>
                 {% if query %}
@@ -59,10 +62,61 @@
                         <thead>
                             <tr>
                                 <th>Nome</th>
-                                <th>Idade</th>
-                                <th>Quantidade comprada</th>
+                                <th>
+                                    <div class="sortable-heading">
+                                        <span>Idade</span>
+                                        <a href="?{{ sort_links.age.url }}" class="sort-button {% if sort_links.age.active %}active{% endif %}" aria-label="{{ sort_links.age.label }}" title="{{ sort_links.age.label }}">
+                                            {% if sort_links.age.direction == "asc" %}
+                                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                    <path d="M12 19V5" />
+                                                    <path d="m5 12 7-7 7 7" />
+                                                </svg>
+                                            {% else %}
+                                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                    <path d="M12 5v14" />
+                                                    <path d="m19 12-7 7-7-7" />
+                                                </svg>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="sortable-heading">
+                                        <span>Quantidade comprada</span>
+                                        <a href="?{{ sort_links.items.url }}" class="sort-button {% if sort_links.items.active %}active{% endif %}" aria-label="{{ sort_links.items.label }}" title="{{ sort_links.items.label }}">
+                                            {% if sort_links.items.direction == "asc" %}
+                                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                    <path d="M12 19V5" />
+                                                    <path d="m5 12 7-7 7 7" />
+                                                </svg>
+                                            {% else %}
+                                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                    <path d="M12 5v14" />
+                                                    <path d="m19 12-7 7-7-7" />
+                                                </svg>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </th>
                                 <th>Item mais comprado</th>
-                                <th>Total comprado</th>
+                                <th>
+                                    <div class="sortable-heading">
+                                        <span>Total comprado</span>
+                                        <a href="?{{ sort_links.spent.url }}" class="sort-button {% if sort_links.spent.active %}active{% endif %}" aria-label="{{ sort_links.spent.label }}" title="{{ sort_links.spent.label }}">
+                                            {% if sort_links.spent.direction == "asc" %}
+                                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                    <path d="M12 19V5" />
+                                                    <path d="m5 12 7-7 7 7" />
+                                                </svg>
+                                            {% else %}
+                                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                    <path d="M12 5v14" />
+                                                    <path d="m19 12-7 7-7-7" />
+                                                </svg>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </th>
                                 <th>Acoes</th>
                             </tr>
                         </thead>

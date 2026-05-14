@@ -24,6 +24,32 @@ class ClientTests(TestCase):
         self.assertContains(response, "João Silva")
         self.assertNotContains(response, "Maria")
 
+    def test_client_list_sorts_by_age_quantity_and_total_spent(self):
+        ana = Client.objects.create(name="Ana", age="20")
+        bia = Client.objects.create(name="Bia", age="35")
+        caio = Client.objects.create(name="Caio", age="")
+        pipa = Product.objects.create(
+            name="Pipa",
+            description="Pipa pronta",
+            quantity=20,
+            cost_price="2.00",
+            price="10.00",
+        )
+
+        ana_sale = Sale.objects.create(client=ana)
+        SaleItem.objects.create(sale=ana_sale, product=pipa, quantity=2, unit_price="10.00")
+        bia_sale = Sale.objects.create(client=bia)
+        SaleItem.objects.create(sale=bia_sale, product=pipa, quantity=5, unit_price="10.00")
+
+        response = self.client.get(reverse("clientes"), {"sort": "age_desc"})
+        self.assertEqual([client.name for client in response.context["clients"]], ["Bia", "Ana", "Caio"])
+
+        response = self.client.get(reverse("clientes"), {"sort": "items_desc"})
+        self.assertEqual([client.name for client in response.context["clients"]], ["Bia", "Ana", "Caio"])
+
+        response = self.client.get(reverse("clientes"), {"sort": "spent_asc"})
+        self.assertEqual([client.name for client in response.context["clients"]], ["Caio", "Ana", "Bia"])
+
 
 class FinancialCategoryTests(TestCase):
     def test_financial_category_list_creates_default_sale_category(self):

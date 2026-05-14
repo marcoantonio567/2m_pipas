@@ -354,6 +354,45 @@ th {
     text-transform: uppercase;
 }
 
+.sortable-heading {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sort-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--primary-dark);
+    background: #ffffff;
+    text-decoration: none;
+    transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.sort-button svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sort-button:hover,
+.sort-button:focus,
+.sort-button.active {
+    color: #ffffff;
+    background: var(--primary);
+    border-color: var(--primary);
+    outline: none;
+}
+
 td {
     font-size: 15px;
 }
