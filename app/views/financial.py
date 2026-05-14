@@ -66,6 +66,14 @@ class CashRegisterView(DefaultFinancialCategoryMixin, TemplateView):
         context["paginator"] = paginator
         context["page_obj"] = page_obj
         context["is_paginated"] = page_obj.has_other_pages()
+        context["pagination_pages"] = [
+            page if isinstance(page, int) else "..."
+            for page in paginator.get_elided_page_range(
+                page_obj.number,
+                on_each_side=1,
+                on_ends=1,
+            )
+        ]
         context["totals"] = totals
         context["total_transactions"] = transactions.count()
         return context

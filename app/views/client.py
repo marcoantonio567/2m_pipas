@@ -23,7 +23,20 @@ class ClientListView(ListView):
         context["clients_with_sales"] = sum(1 for client in clients if client.total_quantity)
         context["total_items_purchased"] = sum(client.total_quantity for client in clients)
         context["total_clients_spent"] = sum(client.total_spent for client in clients)
+        context["pagination_pages"] = self.get_pagination_pages(context)
         return context
+
+    def get_pagination_pages(self, context):
+        if not context.get("is_paginated"):
+            return []
+        return [
+            page if isinstance(page, int) else "..."
+            for page in context["paginator"].get_elided_page_range(
+                context["page_obj"].number,
+                on_each_side=1,
+                on_ends=1,
+            )
+        ]
 
     def get_queryset(self):
         total_spent = ExpressionWrapper(

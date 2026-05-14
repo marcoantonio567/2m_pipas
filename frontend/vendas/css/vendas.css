@@ -294,7 +294,8 @@
         }
 
         .pagination-links a,
-        .pagination-links strong {
+        .pagination-links strong,
+        .pagination-ellipsis {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -306,6 +307,11 @@
             font-size: 13px;
             font-weight: 700;
             text-decoration: none;
+        }
+
+        .pagination-ellipsis {
+            color: var(--muted);
+            border-color: transparent;
         }
 
         .pagination-links a {

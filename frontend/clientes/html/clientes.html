@@ -107,8 +107,10 @@
                                 <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
                             {% endif %}
 
-                            {% for page_number in page_obj.paginator.page_range %}
-                                {% if page_number == page_obj.number %}
+                            {% for page_number in pagination_pages %}
+                                {% if page_number == "..." %}
+                                    <span class="pagination-ellipsis">...</span>
+                                {% elif page_number == page_obj.number %}
                                     <strong>{{ page_number }}</strong>
                                 {% else %}
                                     <a href="?page={{ page_number }}">{{ page_number }}</a>

@@ -40,6 +40,7 @@ class SaleListView(ListView):
         context["selected_payment_method"] = self.request.GET.get("pagamento", "").strip()
         context["query"] = self.request.GET.get("q", "").strip()
         context["pagination_query"] = self.get_pagination_query()
+        context["pagination_pages"] = self.get_pagination_pages(context)
         context["total_revenue"] = sum(sale.total_price for sale in sale_list)
         context["total_items"] = sum(item.quantity for sale in sale_list for item in sale.items.all())
 
@@ -54,6 +55,18 @@ class SaleListView(ListView):
         query_params = self.request.GET.copy()
         query_params.pop("page", None)
         return query_params.urlencode()
+
+    def get_pagination_pages(self, context):
+        if not context.get("is_paginated"):
+            return []
+        return [
+            page if isinstance(page, int) else "..."
+            for page in context["paginator"].get_elided_page_range(
+                context["page_obj"].number,
+                on_each_side=1,
+                on_ends=1,
+            )
+        ]
 
 
 class SaleCreateView(FormView):
