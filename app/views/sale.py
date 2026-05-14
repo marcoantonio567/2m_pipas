@@ -1,7 +1,8 @@
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import F, Q
 from django.shortcuts import redirect
-from django.views.generic import FormView, ListView
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView, FormView, ListView
 
 from app.forms import SaleForm
 from app.models import Client, FinancialCategory, FinancialTransaction, Product, Sale, SaleItem
@@ -106,3 +107,30 @@ class SaleCreateView(FormView):
             ),
             amount=sale_item.total_price,
         )
+
+
+class SaleDeleteView(DeleteView):
+    """Exibe a confirmacao e remove uma venda, devolvendo estoque e caixa."""
+
+    model = Sale
+    template_name = "vendas/html/venda_confirm_delete.html"
+    context_object_name = "sale"
+    pk_url_kwarg = "sale_id"
+    success_url = reverse_lazy("vendas")
+
+    def form_valid(self, form):
+        with transaction.atomic():
+            sale = Sale.objects.select_for_update().prefetch_related("items__product").get(
+                pk=self.object.pk
+            )
+            for item in sale.items.all():
+                Product.objects.filter(pk=item.product_id).update(
+                    quantity=F("quantity") + item.quantity
+                )
+            FinancialTransaction.objects.filter(
+                type=FinancialTransaction.INCOME,
+                category__name=FinancialCategory.PROTECTED_NAME,
+                description__startswith=f"Venda #{sale.id} -",
+            ).delete()
+            sale.delete()
+        return redirect(self.success_url)

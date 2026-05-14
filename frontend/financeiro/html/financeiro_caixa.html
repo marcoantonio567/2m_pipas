@@ -54,6 +54,7 @@
                                 <th>Categoria</th>
                                 <th>Descricao</th>
                                 <th>Valor</th>
+                                <th>Acoes</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -71,6 +72,9 @@
                                     <td data-label="Descricao">{{ transaction.description|default:"-" }}</td>
                                     <td data-label="Valor" class="amount {% if transaction.type == "entrada" %}income{% else %}expense{% endif %}">
                                         R$ {{ transaction.amount|floatformat:2 }}
+                                    </td>
+                                    <td data-label="Acoes">
+                                        <a class="delete-link" href="{% url 'financeiro_movimentacao_excluir' transaction.id %}">Excluir</a>
                                     </td>
                                 </tr>
                             {% endfor %}

@@ -77,6 +77,16 @@ class FinancialTransactionCreateView(DefaultFinancialCategoryMixin, CreateView):
         return super().dispatch(request, *args, **kwargs)
 
 
+class FinancialTransactionDeleteView(DeleteView):
+    """Exibe a confirmacao e remove uma movimentacao financeira."""
+
+    model = FinancialTransaction
+    template_name = "financeiro/html/financeiro_movimentacao_confirm_delete.html"
+    context_object_name = "transaction"
+    pk_url_kwarg = "transaction_id"
+    success_url = reverse_lazy("financeiro_caixa")
+
+
 class FinancialCategoryCreateView(CreateView):
     """Exibe e processa o formulario de cadastro de categorias financeiras."""
 

@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2M Pipas - Excluir Movimentacao</title>
+    <link rel="stylesheet" href="{% static 'financeiro/css/financeiro_movimentacao_confirm_delete.css' %}">
+    <link rel="stylesheet" href="{% static 'shared/css/sidebar.css' %}">
+</head>
+<body>
+    <main class="page">
+        {% include 'shared/html/sidebar.html' %}
+
+        <section class="content">
+            <form class="confirm-panel" method="post">
+                {% csrf_token %}
+                <span class="warning-icon">!</span>
+                <h1>Excluir movimentacao</h1>
+                <p>Confirme para remover esta transacao do caixa.</p>
+                <div class="transaction-name">
+                    <span>Movimentacao selecionada</span>
+                    <strong>{{ transaction.get_type_display }} - {{ transaction.category.name }} - R$ {{ transaction.amount|floatformat:2 }}</strong>
+                </div>
+
+                <div class="actions">
+                    <button class="button button-danger" type="submit">Excluir movimentacao</button>
+                    <a class="button button-secondary" href="{% url 'financeiro_caixa' %}">Cancelar</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

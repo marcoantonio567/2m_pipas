@@ -69,6 +69,23 @@ class FinancialCategoryTests(TestCase):
         self.assertContains(response, "R$ 35.50")
         self.assertContains(response, "R$ 64.50")
 
+    def test_financial_transaction_can_be_deleted(self):
+        category = FinancialCategory.objects.get(name="venda")
+        transaction = FinancialTransaction.objects.create(
+            type=FinancialTransaction.EXPENSE,
+            category=category,
+            description="Compra",
+            amount="15.00",
+            date="2026-05-13",
+        )
+
+        response = self.client.post(
+            reverse("financeiro_movimentacao_excluir", args=[transaction.id])
+        )
+
+        self.assertRedirects(response, reverse("financeiro_caixa"))
+        self.assertFalse(FinancialTransaction.objects.filter(id=transaction.id).exists())
+
 
 class SaleTests(TestCase):
     def test_sale_create_registers_new_client_payment_financial_entry_and_stock(self):
@@ -133,3 +150,31 @@ class SaleTests(TestCase):
         self.assertRedirects(response, reverse("vendas"))
         self.assertEqual(Client.objects.count(), 1)
         self.assertTrue(Sale.objects.filter(client=client, payment_method=Sale.PIX).exists())
+
+    def test_sale_can_be_deleted_and_restores_stock_and_financial_entry(self):
+        client = Client.objects.create(name="Ana", age="28")
+        category = FinancialCategory.objects.get(name="venda")
+        product = Product.objects.create(
+            name="Rabiola",
+            description="Rabiola colorida",
+            quantity=2,
+            cost_price="1.00",
+            price="5.00",
+        )
+        sale = Sale.objects.create(client=client, payment_method=Sale.CASH)
+        SaleItem.objects.create(sale=sale, product=product, quantity=3, unit_price="5.00")
+        FinancialTransaction.objects.create(
+            type=FinancialTransaction.INCOME,
+            category=category,
+            description=f"Venda #{sale.id} - Ana - Dinheiro",
+            amount="15.00",
+            date="2026-05-13",
+        )
+
+        response = self.client.post(reverse("venda_excluir", args=[sale.id]))
+
+        self.assertRedirects(response, reverse("vendas"))
+        product.refresh_from_db()
+        self.assertEqual(product.quantity, 5)
+        self.assertFalse(Sale.objects.filter(id=sale.id).exists())
+        self.assertFalse(FinancialTransaction.objects.filter(description__startswith=f"Venda #{sale.id} -").exists())

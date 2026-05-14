@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2M Pipas - Excluir Venda</title>
+    <link rel="stylesheet" href="{% static 'vendas/css/venda_confirm_delete.css' %}">
+    <link rel="stylesheet" href="{% static 'shared/css/sidebar.css' %}">
+</head>
+<body>
+    <main class="page">
+        {% include 'shared/html/sidebar.html' %}
+
+        <section class="content">
+            <form class="confirm-panel" method="post">
+                {% csrf_token %}
+                <span class="warning-icon">!</span>
+                <h1>Excluir venda</h1>
+                <p>Confirme para remover esta venda, devolver os itens ao estoque e apagar a entrada financeira vinculada.</p>
+                <div class="sale-name">
+                    <span>Venda selecionada</span>
+                    <strong>#{{ sale.id }} - {{ sale.client.name }} - R$ {{ sale.total_price|floatformat:2 }}</strong>
+                </div>
+
+                <div class="actions">
+                    <button class="button button-danger" type="submit">Excluir venda</button>
+                    <a class="button button-secondary" href="{% url 'vendas' %}">Cancelar</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

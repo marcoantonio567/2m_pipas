@@ -67,6 +67,7 @@
                                 <th>Pagamento</th>
                                 <th>Data</th>
                                 <th>Total</th>
+                                <th>Acoes</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -89,6 +90,9 @@
                                     </td>
                                     <td data-label="Total">
                                         <span class="amount">R$ {{ sale.total_price|floatformat:2 }}</span>
+                                    </td>
+                                    <td data-label="Acoes">
+                                        <a class="delete-link" href="{% url 'venda_excluir' sale.id %}">Excluir</a>
                                     </td>
                                 </tr>
                             {% endfor %}

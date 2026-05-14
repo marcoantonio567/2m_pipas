@@ -270,7 +270,7 @@ body {
 table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 820px;
+    min-width: 900px;
 }
 
 th,
@@ -333,6 +333,21 @@ tr:last-child td {
     font-size: 16px;
     font-weight: 700;
     white-space: nowrap;
+}
+
+.delete-link {
+    color: var(--accent-red);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.delete-link:hover,
+.delete-link:focus {
+    color: #8f1c13;
+    text-decoration: underline;
+    outline: none;
 }
 
 .empty {
@@ -467,7 +482,8 @@ tr:last-child td {
 
     .type-label,
     .category-pill,
-    .amount {
+    .amount,
+    .delete-link {
         justify-self: end;
         max-width: 100%;
         white-space: normal;
@@ -500,7 +516,8 @@ tr:last-child td {
 
     .type-label,
     .category-pill,
-    .amount {
+    .amount,
+    .delete-link {
         justify-self: start;
         text-align: left;
     }

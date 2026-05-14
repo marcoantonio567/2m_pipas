@@ -7,9 +7,10 @@ from .financial import (
     FinancialCategoryListView,
     FinancialCategoryUpdateView,
     FinancialTransactionCreateView,
+    FinancialTransactionDeleteView,
 )
 from .product import ProductCreateView, ProductDeleteView, ProductListView, ProductUpdateView
-from .sale import SaleCreateView, SaleListView
+from .sale import SaleCreateView, SaleDeleteView, SaleListView
 
 __all__ = [
     "CashRegisterView",
@@ -23,10 +24,12 @@ __all__ = [
     "FinancialCategoryListView",
     "FinancialCategoryUpdateView",
     "FinancialTransactionCreateView",
+    "FinancialTransactionDeleteView",
     "ProductCreateView",
     "ProductDeleteView",
     "ProductListView",
     "ProductUpdateView",
     "SaleCreateView",
+    "SaleDeleteView",
     "SaleListView",
 ]
