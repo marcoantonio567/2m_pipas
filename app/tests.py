@@ -4,6 +4,27 @@ from django.urls import reverse
 from .models import Client, FinancialCategory, FinancialTransaction, Product, Sale, SaleItem
 
 
+class ClientTests(TestCase):
+    def test_client_search_ignores_accents_and_case(self):
+        Client.objects.create(name="Joao Pedro", age="20")
+        Client.objects.create(name="João Silva", age="30")
+        Client.objects.create(name="Maria", age="25")
+
+        response = self.client.get(reverse("clientes"), {"q": "joão"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Joao Pedro")
+        self.assertContains(response, "João Silva")
+        self.assertNotContains(response, "Maria")
+
+        response = self.client.get(reverse("clientes"), {"q": "Joao"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Joao Pedro")
+        self.assertContains(response, "João Silva")
+        self.assertNotContains(response, "Maria")
+
+
 class FinancialCategoryTests(TestCase):
     def test_financial_category_list_creates_default_sale_category(self):
         response = self.client.get(reverse("financeiro_categorias"))

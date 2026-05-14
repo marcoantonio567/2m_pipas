@@ -283,6 +283,48 @@ body {
     gap: 8px;
 }
 
+.filters {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) auto auto;
+    gap: 10px;
+    align-items: end;
+    margin-bottom: 18px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: 0 10px 24px rgba(23, 32, 51, 0.06);
+}
+
+.filter-field label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.field {
+    width: 100%;
+    min-height: 40px;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    background: #ffffff;
+    font: inherit;
+}
+
+.field:focus {
+    border-color: var(--primary);
+    outline: 3px solid #c7ebe7;
+}
+
+button.action-link {
+    cursor: pointer;
+    font: inherit;
+}
+
 .table-wrap {
     overflow-x: auto;
     background: var(--surface);
@@ -509,6 +551,10 @@ tr:last-child td {
     }
 
     .summary {
+        grid-template-columns: 1fr;
+    }
+
+    .filters {
         grid-template-columns: 1fr;
     }
 

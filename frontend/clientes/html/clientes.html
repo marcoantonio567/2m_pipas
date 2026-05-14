@@ -41,6 +41,18 @@
                 </article>
             </div>
 
+            <form class="filters" method="get">
+                <div class="filter-field">
+                    <label for="q">Buscar cliente</label>
+                    <input class="field" id="q" name="q" type="search" value="{{ query }}" placeholder="Nome do cliente">
+                </div>
+
+                <button class="action-link primary-action" type="submit">Pesquisar</button>
+                {% if query %}
+                    <a class="action-link secondary-action" href="{% url 'clientes' %}">Limpar</a>
+                {% endif %}
+            </form>
+
             {% if clients %}
                 <div class="table-wrap">
                     <table>
@@ -104,7 +116,7 @@
                         <span>Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
                         <div class="pagination-links">
                             {% if page_obj.has_previous %}
-                                <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                                <a href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_obj.previous_page_number }}">Anterior</a>
                             {% endif %}
 
                             {% for page_number in pagination_pages %}
@@ -113,20 +125,25 @@
                                 {% elif page_number == page_obj.number %}
                                     <strong>{{ page_number }}</strong>
                                 {% else %}
-                                    <a href="?page={{ page_number }}">{{ page_number }}</a>
+                                    <a href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_number }}">{{ page_number }}</a>
                                 {% endif %}
                             {% endfor %}
 
                             {% if page_obj.has_next %}
-                                <a href="?page={{ page_obj.next_page_number }}">Proxima</a>
+                                <a href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_obj.next_page_number }}">Proxima</a>
                             {% endif %}
                         </div>
                     </nav>
                 {% endif %}
             {% else %}
                 <div class="empty">
-                    <strong>Nenhum cliente cadastrado.</strong>
-                    <span>Cadastre o primeiro cliente para acompanhar compras e preferencias.</span>
+                    {% if query %}
+                        <strong>Nenhum cliente encontrado.</strong>
+                        <span>Tente pesquisar por outro nome ou limpe a busca para ver todos.</span>
+                    {% else %}
+                        <strong>Nenhum cliente cadastrado.</strong>
+                        <span>Cadastre o primeiro cliente para acompanhar compras e preferencias.</span>
+                    {% endif %}
                 </div>
             {% endif %}
         </section>

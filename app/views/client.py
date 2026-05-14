@@ -1,3 +1,5 @@
+import unicodedata
+
 from django.db.models import DecimalField, ExpressionWrapper, F, Sum
 from django.db.models.functions import Coalesce
 from django.urls import reverse_lazy
@@ -5,6 +7,11 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from app.forms import ClientForm
 from app.models import Client, SaleItem
+
+
+def normalize_search_text(value):
+    normalized = unicodedata.normalize("NFKD", value)
+    return "".join(char for char in normalized if not unicodedata.combining(char)).casefold()
 
 
 class ClientListView(ListView):
@@ -19,12 +26,19 @@ class ClientListView(ListView):
         context = super().get_context_data(**kwargs)
         clients = list(self.object_list)
 
+        context["query"] = self.request.GET.get("q", "").strip()
+        context["pagination_query"] = self.get_pagination_query()
         context["total_clients"] = len(clients)
         context["clients_with_sales"] = sum(1 for client in clients if client.total_quantity)
         context["total_items_purchased"] = sum(client.total_quantity for client in clients)
         context["total_clients_spent"] = sum(client.total_spent for client in clients)
         context["pagination_pages"] = self.get_pagination_pages(context)
         return context
+
+    def get_pagination_query(self):
+        query_params = self.request.GET.copy()
+        query_params.pop("page", None)
+        return query_params.urlencode()
 
     def get_pagination_pages(self, context):
         if not context.get("is_paginated"):
@@ -51,6 +65,16 @@ class ClientListView(ListView):
                 output_field=DecimalField(max_digits=12, decimal_places=2),
             ),
         ).order_by("name")
+
+        query = self.request.GET.get("q", "").strip()
+        if query:
+            normalized_query = normalize_search_text(query)
+            matching_client_ids = [
+                client_id
+                for client_id, name in Client.objects.values_list("id", "name")
+                if normalized_query in normalize_search_text(name)
+            ]
+            clients = clients.filter(id__in=matching_client_ids)
 
         for client in clients:
             most_purchased = (
