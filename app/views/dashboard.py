@@ -2,7 +2,7 @@ from decimal import Decimal
 from collections import defaultdict
 
 from django.db.models import DecimalField, Q, Sum
-from django.db.models.functions import Coalesce
+from django.db.models.functions import Coalesce, TruncMonth
 from django.utils import timezone
 from django.views.generic import TemplateView
 
@@ -122,7 +122,8 @@ class DashboardView(TemplateView):
     def get_revenue_by_date(self):
         revenues = (
             FinancialTransaction.objects.filter(type=FinancialTransaction.INCOME)
-            .values("date")
+            .annotate(month=TruncMonth("date"))
+            .values("month")
             .annotate(
                 total=Coalesce(
                     Sum("amount"),
@@ -130,11 +131,11 @@ class DashboardView(TemplateView):
                     output_field=DecimalField(max_digits=12, decimal_places=2),
                 )
             )
-            .order_by("-date")[:10]
+            .order_by("-month")[:12]
         )
         return [
             {
-                "label": row["date"].strftime("%d/%m/%Y") if row["date"] else "Sem data",
+                "label": row["month"].strftime("%m/%Y") if row["month"] else "Sem data",
                 "total": row["total"],
             }
             for row in reversed(list(revenues))

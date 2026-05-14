@@ -22,6 +22,7 @@
 body {
     margin: 0;
     min-height: 100vh;
+    overflow-x: hidden;
     font-family: Arial, Helvetica, sans-serif;
     color: var(--text);
     background:
@@ -33,6 +34,7 @@ body {
     min-height: 100vh;
     display: grid;
     grid-template-columns: 280px 1fr;
+    min-width: 0;
 }
 
 .sidebar {
@@ -101,6 +103,7 @@ body {
 }
 
 .content {
+    min-width: 0;
     padding: 44px;
 }
 
@@ -197,6 +200,7 @@ body {
 
 .summary-card,
 .chart-panel {
+    min-width: 0;
     border: 1px solid var(--border);
     border-radius: 8px;
     background: var(--surface);
@@ -259,6 +263,7 @@ body {
 
 .chart-panel {
     min-height: 330px;
+    overflow: hidden;
     padding: 20px;
 }
 
@@ -300,9 +305,13 @@ body {
     grid-auto-columns: minmax(74px, 1fr);
     align-items: end;
     gap: 14px;
+    max-width: 100%;
     min-height: 232px;
+    overflow-x: auto;
+    overflow-y: hidden;
     padding: 14px 4px 0;
     border-bottom: 1px solid var(--border);
+    -webkit-overflow-scrolling: touch;
 }
 
 .bar-column {
@@ -330,10 +339,12 @@ body {
 }
 
 .bar-meta span {
+    max-width: 100%;
     color: var(--muted);
     font-size: 12px;
     font-weight: 700;
     line-height: 1.25;
+    overflow-wrap: anywhere;
 }
 
 .bar-plot {
@@ -443,7 +454,7 @@ body {
 
     .chart-panel {
         min-height: 0;
-        padding: 16px;
+        padding: 14px;
     }
 
     .chart-header,
@@ -452,10 +463,10 @@ body {
     }
 
     .bar-chart {
-        grid-auto-columns: minmax(62px, 1fr);
-        gap: 10px;
-        overflow-x: auto;
-        padding-bottom: 6px;
+        grid-auto-columns: minmax(76px, 88px);
+        gap: 8px;
+        margin-inline: -4px;
+        padding: 12px 4px 8px;
     }
 
     .bar-column {
@@ -475,5 +486,10 @@ body {
     .bar-meta {
         justify-items: start;
         text-align: left;
+    }
+
+    .bar-meta strong,
+    .bar-meta span {
+        font-size: 11px;
     }
 }
