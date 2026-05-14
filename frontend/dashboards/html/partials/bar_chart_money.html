@@ -1,9 +1,9 @@
 {% if rows %}
     <div class="bar-chart">
         {% for row in rows %}
-            <div class="bar-column">
+            <div class="bar-column" style="--bar-delay: {{ forloop.counter0 }};">
                 <div class="bar-plot" aria-hidden="true">
-                    <span class="bar-fill{% if row.total < 0 %} negative-fill{% endif %}" style="height: {{ row.percent }}%;"></span>
+                    <span class="bar-fill{% if row.total < 0 %} negative-fill{% endif %}" style="--bar-size: {{ row.percent }}%;"></span>
                 </div>
                 <div class="bar-meta">
                     <strong>{{ row.label }}</strong>
