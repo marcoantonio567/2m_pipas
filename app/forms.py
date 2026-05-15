@@ -30,7 +30,7 @@ class ClientForm(forms.ModelForm):
 
 class SaleForm(forms.Form):
     product = forms.ModelChoiceField(
-        queryset=Product.objects.order_by("name"),
+        queryset=Product.objects.filter(is_active=True).order_by("name"),
         label="Produto",
         empty_label="Escolha um produto",
         widget=forms.Select(attrs={"class": "field"}),

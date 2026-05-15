@@ -1,3 +1,5 @@
+from django.db.models.deletion import ProtectedError
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
@@ -12,6 +14,9 @@ class ProductListView(ListView):
     template_name = "produtos/html/produtos.html"
     context_object_name = "products"
     ordering = ["name"]
+
+    def get_queryset(self):
+        return Product.objects.filter(is_active=True).order_by("name")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -50,10 +55,23 @@ class ProductUpdateView(UpdateView):
 
 
 class ProductDeleteView(DeleteView):
-    """Exibe a confirmacao e remove um produto cadastrado."""
+    """Remove um produto do catalogo, preservando historico de vendas."""
 
     model = Product
     template_name = "produtos/html/produto_confirm_delete.html"
     context_object_name = "product"
     pk_url_kwarg = "product_id"
     success_url = reverse_lazy("produtos")
+
+    def form_valid(self, form):
+        if self.object.sale_items.exists():
+            self.object.is_active = False
+            self.object.save(update_fields=["is_active"])
+            return redirect(self.success_url)
+
+        try:
+            return super().form_valid(form)
+        except ProtectedError:
+            self.object.is_active = False
+            self.object.save(update_fields=["is_active"])
+            return redirect(self.success_url)

@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.test import TestCase
 from django.urls import reverse
 
+from .forms import SaleForm
 from .models import Client, FinancialCategory, FinancialTransaction, Product, Sale, SaleItem
 
 
@@ -18,6 +19,64 @@ class ProductTests(TestCase):
 
         self.assertEqual(product.profit_value, Decimal("6.00"))
         self.assertAlmostEqual(product.profit_percentage, Decimal("85.71428571428571428571428571"))
+
+    def test_product_without_sales_can_be_deleted(self):
+        product = Product.objects.create(
+            name="Pipa simples",
+            description="Pipa pronta",
+            quantity=1,
+            cost_price=Decimal("1.00"),
+            price=Decimal("7.00"),
+        )
+
+        response = self.client.post(reverse("produto_excluir", args=[product.id]))
+
+        self.assertRedirects(response, reverse("produtos"))
+        self.assertFalse(Product.objects.filter(id=product.id).exists())
+
+    def test_product_with_sales_is_deactivated_when_deleted(self):
+        client = Client.objects.create(name="Ana", age="20")
+        product = Product.objects.create(
+            name="Pipa vendida",
+            description="Pipa pronta",
+            quantity=1,
+            cost_price=Decimal("1.00"),
+            price=Decimal("7.00"),
+        )
+        sale = Sale.objects.create(client=client)
+        SaleItem.objects.create(sale=sale, product=product, quantity=1, unit_price="7.00")
+
+        response = self.client.post(reverse("produto_excluir", args=[product.id]))
+
+        self.assertRedirects(response, reverse("produtos"))
+        product.refresh_from_db()
+        self.assertFalse(product.is_active)
+        self.assertTrue(SaleItem.objects.filter(product=product).exists())
+
+    def test_inactive_product_is_hidden_from_catalog_and_sale_form(self):
+        active_product = Product.objects.create(
+            name="Pipa ativa",
+            description="Pipa pronta",
+            quantity=1,
+            cost_price=Decimal("1.00"),
+            price=Decimal("7.00"),
+        )
+        inactive_product = Product.objects.create(
+            name="Pipa antiga",
+            description="Pipa fora de linha",
+            quantity=1,
+            cost_price=Decimal("1.00"),
+            price=Decimal("7.00"),
+            is_active=False,
+        )
+
+        response = self.client.get(reverse("produtos"))
+
+        self.assertEqual(list(response.context["products"]), [active_product])
+
+        form = SaleForm()
+        self.assertEqual(list(form.fields["product"].queryset), [active_product])
+        self.assertNotIn(inactive_product, form.fields["product"].queryset)
 
 
 class ClientTests(TestCase):

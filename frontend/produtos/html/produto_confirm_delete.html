@@ -17,14 +17,14 @@
                 {% csrf_token %}
                 <span class="warning-icon">!</span>
                 <h1>Excluir produto</h1>
-                <p>Confirme para remover este produto do sistema. Esta acao nao altera vendas ja registradas.</p>
+                <p>Confirme para tirar este produto do catalogo. Vendas antigas continuam com o historico preservado.</p>
                 <div class="product-name">
                     <span>Produto selecionado</span>
                     <strong>{{ product.name }}</strong>
                 </div>
 
                 <div class="actions">
-                    <button class="button button-danger" type="submit">Excluir produto</button>
+                    <button class="button button-danger" type="submit">Tirar do catalogo</button>
                     <a class="button button-secondary" href="{% url 'produtos' %}">Cancelar</a>
                 </div>
             </form>
