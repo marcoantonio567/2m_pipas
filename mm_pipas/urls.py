@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 
 from app.views import (
     CashRegisterView,
+    CalculatorView,
     ClientCreateView,
     ClientDeleteView,
     ClientListView,
@@ -26,6 +27,7 @@ from app.views import (
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='menu/html/menu.html'), name='menu'),
+    path('calculadora/', CalculatorView.as_view(), name='calculadora'),
     path('dashboards/', DashboardView.as_view(), name='dashboards'),
     path('produtos/', ProductListView.as_view(), name='produtos'),
     path('produtos/novo/', ProductCreateView.as_view(), name='produto_novo'),

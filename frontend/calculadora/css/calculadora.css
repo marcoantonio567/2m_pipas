@@ -1,0 +1,224 @@
+:root {
+    color-scheme: light;
+    --background: #f4f7fb;
+    --surface: #ffffff;
+    --primary: #0f766e;
+    --primary-dark: #115e59;
+    --accent-blue: #2563eb;
+    --text: #172033;
+    --muted: #667085;
+    --border: #d8e1ec;
+    --soft: #e7f6f4;
+    --shadow: 0 18px 45px rgba(23, 32, 51, 0.10);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--text);
+    background:
+        linear-gradient(135deg, rgba(15, 118, 110, 0.08), rgba(37, 99, 235, 0.06)),
+        var(--background);
+}
+
+.content {
+    padding: 44px;
+}
+
+.header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    color: var(--primary-dark);
+    background: #dff3f0;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.header h1 {
+    margin: 0 0 8px;
+    font-size: 36px;
+    line-height: 1.15;
+}
+
+.header p {
+    max-width: 680px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.calculator-panel {
+    display: grid;
+    grid-template-columns: minmax(280px, 1.1fr) minmax(260px, 0.9fr);
+    gap: 18px;
+    align-items: stretch;
+    max-width: 980px;
+}
+
+.calculator-form,
+.result-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: 0 10px 24px rgba(23, 32, 51, 0.06);
+}
+
+.calculator-form {
+    display: grid;
+    gap: 18px;
+    padding: 24px;
+}
+
+.field {
+    display: grid;
+    gap: 8px;
+}
+
+.field label {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.field input,
+.field select {
+    width: 100%;
+    min-height: 48px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    background: #ffffff;
+    font: inherit;
+}
+
+.field input:focus,
+.field select:focus {
+    border-color: var(--primary);
+    outline: 3px solid rgba(15, 118, 110, 0.14);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 0 16px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button-primary {
+    color: #ffffff;
+    background: var(--primary);
+}
+
+.button-primary:hover,
+.button-primary:focus {
+    background: var(--primary-dark);
+    outline: none;
+}
+
+.button-secondary {
+    color: var(--primary-dark);
+    background: var(--soft);
+    border-color: #b8e1dc;
+}
+
+.button-secondary:hover,
+.button-secondary:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.result-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 245px;
+    padding: 26px;
+}
+
+.result-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 6px;
+    background: var(--accent-blue);
+}
+
+.result-label {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.result-card strong {
+    margin-top: 14px;
+    color: var(--text);
+    font-size: 32px;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+
+.result-card p {
+    margin: 14px 0 0;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+    .calculator-panel {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .content {
+        padding: 82px 18px 28px;
+    }
+
+    .header h1 {
+        font-size: 30px;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .button {
+        width: 100%;
+    }
+}

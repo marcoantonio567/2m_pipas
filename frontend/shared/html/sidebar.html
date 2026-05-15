@@ -38,6 +38,10 @@
                 <span>Dashboards</span>
                 
             </a>
+            <a class="sidebar-link{% if route == 'calculadora' %} active{% endif %}" href="{% url 'calculadora' %}">
+                <i class="fas fa-calculator" aria-hidden="true"></i>
+                <span>Calculadora</span>
+            </a>
         </nav>
     {% endwith %}
 

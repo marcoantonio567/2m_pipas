@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2M Pipas - Calculadora</title>
+    <link rel="stylesheet" href="{% static 'calculadora/css/calculadora.css' %}">
+    <link rel="stylesheet" href="{% static 'shared/css/sidebar.css' %}">
+</head>
+<body>
+    <main class="page">
+        {% include 'shared/html/sidebar.html' %}
+
+        <section class="content">
+            <div class="header">
+                <div>
+                    <span class="eyebrow">Conversor</span>
+                    <h1>Calculadora</h1>
+                    <p>Converta medidas entre metros e jardas com precisao para cortes, linhas e materiais.</p>
+                </div>
+            </div>
+
+            <section class="calculator-panel" aria-label="Calculadora de metros e jardas">
+                <form class="calculator-form" id="calculatorForm">
+                    <div class="field">
+                        <label for="conversionType">Tipo de conversao</label>
+                        <select id="conversionType" name="conversionType">
+                            <option value="metersToYards">Metros para jardas</option>
+                            <option value="yardsToMeters">Jardas para metros</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="valueInput">Valor</label>
+                        <input id="valueInput" name="value" type="number" min="0" step="0.01" placeholder="0,00" inputmode="decimal">
+                    </div>
+
+                    <div class="actions">
+                        <button class="button button-primary" type="submit">
+                            <i class="fas fa-calculator" aria-hidden="true"></i>
+                            Calcular
+                        </button>
+                        <button class="button button-secondary" type="button" id="clearButton">
+                            <i class="fas fa-eraser" aria-hidden="true"></i>
+                            Limpar
+                        </button>
+                    </div>
+                </form>
+
+                <div class="result-card" aria-live="polite">
+                    <span class="result-label">Resultado</span>
+                    <strong id="resultValue">0,00 jardas</strong>
+                    <p id="resultFormula">1 metro = 1,09361 jardas</p>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script>
+        (function () {
+            const conversionType = document.getElementById('conversionType');
+            const valueInput = document.getElementById('valueInput');
+            const form = document.getElementById('calculatorForm');
+            const clearButton = document.getElementById('clearButton');
+            const resultValue = document.getElementById('resultValue');
+            const resultFormula = document.getElementById('resultFormula');
+
+            const yardPerMeter = 1.09361;
+
+            function formatNumber(value) {
+                return value.toLocaleString('pt-BR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 4,
+                });
+            }
+
+            function updateResult() {
+                const rawValue = Number(valueInput.value.replace(',', '.')) || 0;
+                const isMetersToYards = conversionType.value === 'metersToYards';
+                const result = isMetersToYards ? rawValue * yardPerMeter : rawValue / yardPerMeter;
+                const unit = isMetersToYards ? 'jardas' : 'metros';
+
+                resultValue.textContent = `${formatNumber(result)} ${unit}`;
+                resultFormula.textContent = isMetersToYards
+                    ? '1 metro = 1,09361 jardas'
+                    : '1 jarda = 0,9144 metros';
+            }
+
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                updateResult();
+            });
+
+            conversionType.addEventListener('change', updateResult);
+            valueInput.addEventListener('input', updateResult);
+
+            clearButton.addEventListener('click', function () {
+                valueInput.value = '';
+                conversionType.value = 'metersToYards';
+                updateResult();
+                valueInput.focus();
+            });
+        })();
+    </script>
+</body>
+</html>

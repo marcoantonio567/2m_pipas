@@ -8,6 +8,13 @@ from .models import Client, FinancialCategory, FinancialTransaction, Product, Sa
 
 
 class ProductTests(TestCase):
+    def test_calculator_module_is_available(self):
+        response = self.client.get(reverse("calculadora"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Metros para jardas")
+        self.assertContains(response, "Jardas para metros")
+
     def test_profit_percentage_is_margin_over_sale_price(self):
         product = Product.objects.create(
             name="Pipa",
