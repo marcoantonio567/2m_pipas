@@ -67,6 +67,18 @@ To clean and recreate dummy data:
 python manage.py seed_mock_data --reset-mock
 ```
 
+To remove all application data from the database:
+
+```powershell
+python manage.py clear_database
+```
+
+To run the cleanup without the confirmation prompt:
+
+```powershell
+python manage.py clear_database --yes
+```
+
 5. Start the development server:
 
 ```powershell
