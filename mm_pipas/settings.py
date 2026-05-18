@@ -55,6 +55,10 @@ CSRF_COOKIE_SECURE = env_bool('CSRF_COOKIE_SECURE', default=not DEBUG)
 SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', '31536000' if IS_VERCEL else '0'))
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env_bool('SECURE_HSTS_INCLUDE_SUBDOMAINS', default=False)
 SECURE_HSTS_PRELOAD = env_bool('SECURE_HSTS_PRELOAD', default=False)
+SESSION_ENGINE = os.getenv(
+    'SESSION_ENGINE',
+    'django.contrib.sessions.backends.signed_cookies' if IS_VERCEL else 'django.contrib.sessions.backends.db',
+)
 
 
 # Application definition
