@@ -23,6 +23,13 @@ def env_list(name, default=None):
     return [item.strip() for item in value.split(',') if item.strip()]
 
 
+def supabase_pooler_user(host, user):
+    split_user = os.getenv('SUPABASE_DB_USER')
+    if host and host.endswith('.pooler.supabase.com') and user == 'postgres' and split_user:
+        return split_user
+    return user
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
@@ -124,7 +131,7 @@ elif DATABASE_URL:
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': database_url.path.lstrip('/'),
-            'USER': database_url.username,
+            'USER': supabase_pooler_user(database_url.hostname, database_url.username),
             'PASSWORD': database_url.password,
             'HOST': database_url.hostname,
             'PORT': str(database_url.port or 5432),
