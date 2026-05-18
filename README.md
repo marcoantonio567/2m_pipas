@@ -124,12 +124,14 @@ http://127.0.0.1:8000/
 SECRET_KEY=replace_with_a_secure_random_secret
 DEBUG=False
 DATABASE_ENGINE=postgres
-DATABASE_URL=postgresql://user:password@host:port/database
+SUPABASE_DB_URL=postgresql://postgres.your-project-ref:url_encoded_password@aws-1-us-west-2.pooler.supabase.com:6543/postgres
 SUPABASE_URL=https://your-project-ref.supabase.co
 SUPABASE_KEY=your_supabase_anon_key
 ALLOWED_HOSTS=.vercel.app,your-domain.com
 CSRF_TRUSTED_ORIGINS=https://your-project.vercel.app,https://your-domain.com
 ```
+
+For Supabase pooler connections on port `6543`, use the pooler user format `postgres.<project-ref>`. If your database password has special characters, URL-encode them inside `SUPABASE_DB_URL`, for example `@` as `%40` and `#` as `%23`. Avoid keeping an old conflicting `DATABASE_URL` in Vercel; this project prefers `SUPABASE_DB_URL` when both are present.
 
 3. Deploy the repository on Vercel. The `vercel.json` file selects the Django preset and collects static files for the Vercel CDN.
 4. Apply migrations against the production database:

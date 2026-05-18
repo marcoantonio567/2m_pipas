@@ -108,7 +108,7 @@ WSGI_APPLICATION = 'mm_pipas.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASE_ENGINE = os.getenv('DATABASE_ENGINE', 'postgres' if IS_VERCEL else 'sqlite').lower()
-DATABASE_URL = os.getenv('DATABASE_URL') or os.getenv('SUPABASE_DB_URL')
+DATABASE_URL = os.getenv('SUPABASE_DB_URL') or os.getenv('DATABASE_URL')
 
 if DATABASE_ENGINE == 'sqlite':
     DATABASES = {
