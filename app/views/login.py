@@ -8,6 +8,9 @@ class LoginView(View):
     template_name = "login/html/login.html"
 
     def get(self, request):
+        if request.session.get("access_authenticated"):
+            return redirect("menu")
+
         return render(request, self.template_name)
 
     def post(self, request):
@@ -28,4 +31,5 @@ class LoginView(View):
                 {"error": "Senha incorreta."},
             )
 
+        request.session["access_authenticated"] = True
         return redirect("menu")
