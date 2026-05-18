@@ -1,5 +1,3 @@
-Here's the English translation of your Markdown document:
-
 ```markdown
 # 2M Pipa System
 
