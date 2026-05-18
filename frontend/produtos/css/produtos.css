@@ -118,13 +118,6 @@ body {
     margin-bottom: 22px;
 }
 
-.header-actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
 .eyebrow {
     display: inline-flex;
     align-items: center;
@@ -510,8 +503,7 @@ body {
         font-size: 30px;
     }
 
-    .header-actions {
-        justify-content: flex-start;
+    .header .action-link {
         margin-top: 16px;
     }
 
