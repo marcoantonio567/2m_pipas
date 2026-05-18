@@ -28,11 +28,12 @@ def env_list(name, default=None):
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 IS_VERCEL = bool(os.getenv('VERCEL'))
+BUILDING_STATICFILES = env_bool('BUILDING_STATICFILES')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 if not SECRET_KEY:
-    if IS_VERCEL:
+    if IS_VERCEL and not BUILDING_STATICFILES:
         raise ImproperlyConfigured('Set the SECRET_KEY environment variable on Vercel.')
     SECRET_KEY = 'django-insecure-7we!%_px#8jm$w_e6t3#4e6dxw8!2fi^@3m0$8-2#%)4nen1ir'
 
