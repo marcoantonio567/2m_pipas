@@ -1,4 +1,3 @@
-```markdown
 # 2M Pipa System
 
 Django web system for managing a kite store, with customer registration, products, sales, financial cash management, and dashboards.
