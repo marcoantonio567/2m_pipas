@@ -10,6 +10,7 @@ from .financial import (
     FinancialTransactionCreateView,
     FinancialTransactionDeleteView,
 )
+from .login import LoginView
 from .product import (
     LineProductCreateView,
     ProductCreateView,
@@ -34,6 +35,7 @@ __all__ = [
     "FinancialTransactionCreateView",
     "FinancialTransactionDeleteView",
     "LineProductCreateView",
+    "LoginView",
     "ProductCreateView",
     "ProductDeleteView",
     "ProductListView",

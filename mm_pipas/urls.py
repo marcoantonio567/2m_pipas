@@ -17,6 +17,7 @@ from app.views import (
     FinancialTransactionCreateView,
     FinancialTransactionDeleteView,
     LineProductCreateView,
+    LoginView,
     ProductCreateView,
     ProductDeleteView,
     ProductListView,
@@ -28,6 +29,7 @@ from app.views import (
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='menu/html/menu.html'), name='menu'),
+    path('login/', LoginView.as_view(), name='login'),
     path('calculadora/', CalculatorView.as_view(), name='calculadora'),
     path('dashboards/', DashboardView.as_view(), name='dashboards'),
     path('produtos/', ProductListView.as_view(), name='produtos'),
