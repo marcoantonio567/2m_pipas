@@ -1,3 +1,5 @@
+from decimal import Decimal, ROUND_FLOOR
+
 from django import forms
 
 from .models import Client, FinancialCategory, FinancialTransaction, Product, Sale
@@ -123,6 +125,111 @@ class ProductForm(forms.ModelForm):
                 }
             ),
         }
+
+
+class LineProductForm(forms.ModelForm):
+    total_cost = forms.DecimalField(
+        label="Preco de custo total",
+        min_value=Decimal("0.01"),
+        max_digits=10,
+        decimal_places=2,
+        widget=forms.NumberInput(
+            attrs={
+                "class": "field line-calculation-field",
+                "placeholder": "0.00",
+                "step": "0.01",
+                "min": "0.01",
+            }
+        ),
+    )
+
+    class Meta:
+        model = Product
+        fields = [
+            "name",
+            "description",
+            "measurement_unit",
+            "purchase_measure_quantity",
+            "sale_piece_size",
+            "total_cost",
+            "price",
+        ]
+        labels = {
+            "name": "Nome da linha",
+            "description": "Descricao",
+            "measurement_unit": "Unidade de medida",
+            "purchase_measure_quantity": "tamanho comprada",
+            "sale_piece_size": "Tamanho do pedaco de venda",
+            "price": "Preco de venda por pedaco",
+        }
+        widgets = {
+            "name": forms.TextInput(attrs={"class": "field", "placeholder": "Nome da linha"}),
+            "description": forms.Textarea(
+                attrs={
+                    "class": "field",
+                    "placeholder": "Descricao da linha",
+                    "rows": 5,
+                }
+            ),
+            "measurement_unit": forms.Select(attrs={"class": "field line-calculation-field"}),
+            "purchase_measure_quantity": forms.NumberInput(
+                attrs={
+                    "class": "field line-calculation-field",
+                    "placeholder": "0",
+                    "step": "0.001",
+                    "min": "0.001",
+                }
+            ),
+            "sale_piece_size": forms.NumberInput(
+                attrs={
+                    "class": "field line-calculation-field",
+                    "placeholder": "0",
+                    "step": "0.001",
+                    "min": "0.001",
+                }
+            ),
+            "price": forms.NumberInput(
+                attrs={
+                    "class": "field",
+                    "placeholder": "0.00",
+                    "step": "0.01",
+                    "min": "0",
+                }
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["measurement_unit"].required = True
+        self.fields["purchase_measure_quantity"].required = True
+        self.fields["sale_piece_size"].required = True
+
+    def clean(self):
+        cleaned_data = super().clean()
+        purchase_quantity = cleaned_data.get("purchase_measure_quantity")
+        piece_size = cleaned_data.get("sale_piece_size")
+
+        if purchase_quantity and piece_size and piece_size > purchase_quantity:
+            self.add_error(
+                "sale_piece_size",
+                "O tamanho do pedaco nao pode ser maior que a quantidade comprada.",
+            )
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        product = super().save(commit=False)
+        total_cost = self.cleaned_data["total_cost"]
+        purchase_quantity = self.cleaned_data["purchase_measure_quantity"]
+        piece_size = self.cleaned_data["sale_piece_size"]
+
+        product.product_type = Product.LINE
+        product.quantity = int((purchase_quantity / piece_size).to_integral_value(rounding=ROUND_FLOOR))
+        product.cost_price = ((total_cost / purchase_quantity) * piece_size).quantize(Decimal("0.01"))
+
+        if commit:
+            product.save()
+        return product
 
 
 class FinancialCategoryForm(forms.ModelForm):

@@ -85,6 +85,27 @@ class ProductTests(TestCase):
         self.assertEqual(list(form.fields["product"].queryset), [active_product])
         self.assertNotIn(inactive_product, form.fields["product"].queryset)
 
+    def test_line_product_create_calculates_piece_cost_and_stock(self):
+        response = self.client.post(
+            reverse("produto_linha_novo"),
+            {
+                "name": "Linha 10 jardas",
+                "description": "Rolo fracionado para venda",
+                "measurement_unit": Product.YARD,
+                "purchase_measure_quantity": "500",
+                "sale_piece_size": "10",
+                "total_cost": "100.00",
+                "price": "15.00",
+            },
+        )
+
+        self.assertRedirects(response, reverse("produtos"))
+        product = Product.objects.get(name="Linha 10 jardas")
+        self.assertEqual(product.product_type, Product.LINE)
+        self.assertEqual(product.quantity, 50)
+        self.assertEqual(product.cost_price, Decimal("2.00"))
+        self.assertEqual(product.line_remaining_measure, Decimal("500.000"))
+
 
 class ClientTests(TestCase):
     def test_client_search_ignores_accents_and_case(self):

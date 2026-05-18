@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-from app.forms import ProductForm
+from app.forms import LineProductForm, ProductForm
 from app.models import Product
 
 
@@ -40,6 +40,22 @@ class ProductCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["product"] = None
+        context["is_line_form"] = False
+        return context
+
+
+class LineProductCreateView(CreateView):
+    """Cadastra linha comprada em medida maior e vendida em pedacos."""
+
+    model = Product
+    form_class = LineProductForm
+    template_name = "produtos/html/produto_form.html"
+    success_url = reverse_lazy("produtos")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["product"] = None
+        context["is_line_form"] = True
         return context
 
 

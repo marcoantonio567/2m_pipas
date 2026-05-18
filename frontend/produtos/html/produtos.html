@@ -19,7 +19,10 @@
                     <h1>Produtos</h1>
                     <p>Controle estoque, precos e margem dos produtos cadastrados.</p>
                 </div>
-                <a class="action-link primary-action" href="{% url 'produto_novo' %}">Novo produto</a>
+                <div class="header-actions">
+                    <a class="action-link secondary-action" href="{% url 'produto_linha_novo' %}">Cadastrar linha</a>
+                    <a class="action-link primary-action" href="{% url 'produto_novo' %}">Novo produto</a>
+                </div>
             </div>
 
             <div class="summary" aria-label="Resumo de produtos">
@@ -56,7 +59,7 @@
 
                                 <div class="details">
                                     <div class="detail-pill stock-pill">
-                                        <span>Quantidade</span>
+                                        <span>{% if product.is_line %}Pedacos{% else %}Quantidade{% endif %}</span>
                                         <strong>{{ product.quantity }}</strong>
                                     </div>
                                     <div class="detail-pill cost-pill">
@@ -72,6 +75,14 @@
                                         <strong>{{ product.profit_percentage|floatformat:2 }}%</strong>
                                     </div>
                                 </div>
+
+                                {% if product.is_line %}
+                                    <div class="line-stock">
+                                        <span>Estoque em {{ product.measurement_unit }}</span>
+                                        <strong>{{ product.line_remaining_measure|floatformat:2 }}</strong>
+                                        <small>{{ product.quantity }} pedacos de {{ product.sale_piece_size|floatformat:2 }} {{ product.measurement_unit }}</small>
+                                    </div>
+                                {% endif %}
                             </div>
 
                             <div class="product-footer">

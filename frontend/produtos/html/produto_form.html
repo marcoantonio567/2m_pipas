@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2M Pipas - {% if product %}Alterar Produto{% else %}Novo Produto{% endif %}</title>
+    <title>2M Pipas - {% if product %}Alterar Produto{% elif is_line_form %}Cadastrar Linha{% else %}Novo Produto{% endif %}</title>
     <link rel="stylesheet" href="{% static 'produtos/css/produto_form.css' %}">
     <link rel="stylesheet" href="{% static 'shared/css/sidebar.css' %}">
 </head>
@@ -15,20 +15,56 @@
         <section class="content">
             <div class="header">
                 <span class="eyebrow">Produtos</span>
-                <h1>{% if product %}Alterar produto{% else %}Novo produto{% endif %}</h1>
-                <p>{% if product %}Atualize as informacoes de {{ product.name }}.{% else %}Cadastre estoque, custo e preco de venda em um so lugar.{% endif %}</p>
+                <h1>{% if product %}Alterar produto{% elif is_line_form %}Cadastrar linha{% else %}Novo produto{% endif %}</h1>
+                <p>
+                    {% if product %}
+                        Atualize as informacoes de {{ product.name }}.
+                    {% elif is_line_form %}
+                        Informe a medida comprada e o tamanho vendido para calcular custo e estoque automaticamente.
+                    {% else %}
+                        Cadastre estoque, custo e preco de venda em um so lugar.
+                    {% endif %}
+                </p>
+                {% if not is_line_form and not product %}
+                    <div class="header-actions">
+                        <a class="button button-secondary" href="{% url 'produto_linha_novo' %}">Cadastrar linha</a>
+                    </div>
+                {% endif %}
             </div>
 
             <form class="form-panel" method="post">
                 {% csrf_token %}
 
                 <div class="form-intro">
-                    <span class="form-icon">P</span>
+                    <span class="form-icon">{% if is_line_form %}L{% else %}P{% endif %}</span>
                     <div>
-                        <strong>Informacoes do produto</strong>
-                        <span>Preencha os dados comerciais para manter o estoque organizado.</span>
+                        <strong>{% if is_line_form %}Informacoes da linha{% else %}Informacoes do produto{% endif %}</strong>
+                        <span>
+                            {% if is_line_form %}
+                                O sistema salva o estoque em pedacos e tambem mostra a medida total restante.
+                            {% else %}
+                                Preencha os dados comerciais para manter o estoque organizado.
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
+
+                {% if is_line_form %}
+                    <div class="calculation-panel" aria-live="polite">
+                        <div>
+                            <span>Custo por pedaco</span>
+                            <strong id="lineCostPreview">R$ 0,00</strong>
+                        </div>
+                        <div>
+                            <span>Pedacos disponiveis</span>
+                            <strong id="linePiecesPreview">0</strong>
+                        </div>
+                        <div>
+                            <span>Medida total em estoque</span>
+                            <strong id="lineMeasurePreview">0</strong>
+                        </div>
+                    </div>
+                {% endif %}
 
                 {% for field in form %}
                     <div class="form-row">
@@ -45,11 +81,55 @@
                 {% endfor %}
 
                 <div class="actions">
-                    <button class="button button-primary" type="submit">{% if product %}Salvar alteracoes{% else %}Cadastrar produto{% endif %}</button>
+                    <button class="button button-primary" type="submit">{% if product %}Salvar alteracoes{% elif is_line_form %}Cadastrar linha{% else %}Cadastrar produto{% endif %}</button>
                     <a class="button button-secondary" href="{% url 'produtos' %}">Cancelar</a>
                 </div>
             </form>
         </section>
     </main>
+
+    {% if is_line_form %}
+        <script>
+            (() => {
+                const totalCost = document.getElementById("id_total_cost");
+                const totalMeasure = document.getElementById("id_purchase_measure_quantity");
+                const pieceSize = document.getElementById("id_sale_piece_size");
+                const unit = document.getElementById("id_measurement_unit");
+                const costPreview = document.getElementById("lineCostPreview");
+                const piecesPreview = document.getElementById("linePiecesPreview");
+                const measurePreview = document.getElementById("lineMeasurePreview");
+                const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+
+                const readNumber = (input) => Number((input?.value || "").replace(",", "."));
+
+                const updatePreview = () => {
+                    const cost = readNumber(totalCost);
+                    const measure = readNumber(totalMeasure);
+                    const piece = readNumber(pieceSize);
+                    const selectedUnit = unit?.value || "";
+
+                    if (!cost || !measure || !piece) {
+                        costPreview.textContent = money.format(0);
+                        piecesPreview.textContent = "0";
+                        measurePreview.textContent = selectedUnit ? `0 ${selectedUnit}` : "0";
+                        return;
+                    }
+
+                    const pieces = Math.floor(measure / piece);
+                    const costPerPiece = (cost / measure) * piece;
+
+                    costPreview.textContent = money.format(costPerPiece);
+                    piecesPreview.textContent = String(pieces);
+                    measurePreview.textContent = `${measure.toLocaleString("pt-BR")} ${selectedUnit}`;
+                };
+
+                [totalCost, totalMeasure, pieceSize, unit].forEach((field) => {
+                    field?.addEventListener("input", updatePreview);
+                    field?.addEventListener("change", updatePreview);
+                });
+                updatePreview();
+            })();
+        </script>
+    {% endif %}
 </body>
 </html>

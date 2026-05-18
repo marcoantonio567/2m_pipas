@@ -118,6 +118,13 @@ body {
     margin-bottom: 22px;
 }
 
+.header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
 .eyebrow {
     display: inline-flex;
     align-items: center;
@@ -276,6 +283,35 @@ body {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
     margin-top: 18px;
+}
+
+.line-stock {
+    display: grid;
+    gap: 5px;
+    margin-top: 12px;
+    padding: 12px;
+    border: 1px solid #c7d2fe;
+    border-radius: 8px;
+    color: #3730a3;
+    background: #eef2ff;
+}
+
+.line-stock span,
+.line-stock small {
+    color: #4f46e5;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.line-stock strong {
+    font-size: 18px;
+    line-height: 1.2;
+}
+
+.line-stock small {
+    line-height: 1.35;
+    text-transform: none;
 }
 
 .detail-pill {
@@ -474,7 +510,8 @@ body {
         font-size: 30px;
     }
 
-    .header .action-link {
+    .header-actions {
+        justify-content: flex-start;
         margin-top: 16px;
     }
 

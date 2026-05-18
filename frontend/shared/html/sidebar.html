@@ -17,7 +17,7 @@
 
     {% with route=request.resolver_match.url_name %}
         <nav class="nav-menu">
-            <a class="sidebar-link{% if route == 'produtos' or route == 'produto_novo' or route == 'produto_alterar' or route == 'produto_excluir' %} active{% endif %}" href="{% url 'produtos' %}">
+            <a class="sidebar-link{% if route == 'produtos' or route == 'produto_novo' or route == 'produto_linha_novo' or route == 'produto_alterar' or route == 'produto_excluir' %} active{% endif %}" href="{% url 'produtos' %}">
                 <i class="fas fa-box" aria-hidden="true"></i>
                 <span>Produtos</span>
             </a>
