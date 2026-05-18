@@ -6,3 +6,4 @@ mm_pipas/__pycache__/
 *.pyc
 .env
 database/backups/
+staticfiles/
