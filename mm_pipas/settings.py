@@ -1,5 +1,4 @@
 from pathlib import Path
-from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 import os
 from urllib.parse import parse_qsl, urlparse
@@ -31,11 +30,11 @@ IS_VERCEL = bool(os.getenv('VERCEL'))
 BUILDING_STATICFILES = env_bool('BUILDING_STATICFILES')
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
-if not SECRET_KEY:
-    if IS_VERCEL and not BUILDING_STATICFILES:
-        raise ImproperlyConfigured('Set the SECRET_KEY environment variable on Vercel.')
-    SECRET_KEY = 'django-insecure-7we!%_px#8jm$w_e6t3#4e6dxw8!2fi^@3m0$8-2#%)4nen1ir'
+SECRET_KEY = (
+    os.getenv('SECRET_KEY')
+    or os.getenv('DJANGO_SECRET_KEY')
+    or 'django-insecure-7we!%_px#8jm$w_e6t3#4e6dxw8!2fi^@3m0$8-2#%)4nen1ir'
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env_bool('DEBUG', default=not IS_VERCEL)
